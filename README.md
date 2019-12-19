@@ -1,6 +1,6 @@
 # Log 4 Dart 2
 
-A dart package for logging, with multiple and configurable appenders.
+A dart package for advanced logging, with multiple and configurable appenders.
 
 ## Table of Contents
 
@@ -9,8 +9,16 @@ A dart package for logging, with multiple and configurable appenders.
    * [pubspec.yaml](#pubspec.yaml)
 3. [Import](#import)
 4. [Usage](#usage)
-   * [StringUtils](#stringutils)
+   * [Setup Logger](#setup-logger)
+   * [Logging](#logging)
 5. [Appender And Configuration](#appender-and-configuration)
+   * [ConsoleAppender](#consoleappender)
+   * [FileAppender](#fileappender)
+   * [HttpAppender](#httpappender)
+   * [EmailAppender](#emailappender)
+   * [MySqlAppender](#mysqlappender)
+   * [Log Format](#log-format)
+   * [Example configuration](#example-configuration)
 6. [Changelog](#changelog)
 7. [Copyright And License](#copyright-and-license)
 
@@ -26,7 +34,7 @@ Update pubspec.yaml and add the following line to your dependencies.
 
 ```yaml
 dependencies:
-  log_for_dart_2: ^1.0.0
+  log_for_dart_2: ^0.1.0
 ```
 
 ## Import
@@ -68,7 +76,19 @@ The [ConsoleAppender](/lib/src/appender/ConsoleAppender.dart) is a simple append
 
 ### FileAppender
 
-The [FileAppender](/lib/src/appender/FileAppender.dart) appends every log entry to a certain logfile.
+The [FileAppender](/lib/src/appender/FileAppender.dart) appends every log entry to a logfile.
+
+### HttpAppender
+
+The [HttpAppender](/lib/src/appender/HttpAppender.dart) sends a log entry via **HTTP POST** request to a given url.
+
+### EmailAppender
+
+The [EmailAppender](/lib/src/appender/EmailAppender.dart) sends a log entry via email to a given address.
+
+### MySqlAppender
+
+The [MySqlAppender](/lib/src/appender/MySqlAppender.dart) appends every log entry to a table in a mysql database.
 
 ### Log format
 
@@ -84,7 +104,7 @@ Examples :
 * "%d %t %l %m"
 * "This log entry was created on %d from class %t. It has the level %l and the message %m"
 
-### Example configuration
+### Example Configuration
 
 ```dart
 var config = {

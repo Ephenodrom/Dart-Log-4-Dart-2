@@ -9,4 +9,6 @@ abstract class Appender {
   static String defaultFormat = '%d %t %l %m';
 
   void append(LogRecord logRecord);
+
+  void init(Map<String, dynamic> config);
 }

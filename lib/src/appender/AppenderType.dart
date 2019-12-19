@@ -1,4 +1,4 @@
-enum AppenderType { CONSOLE, FILE }
+enum AppenderType { CONSOLE, FILE, HTTP, EMAIL, MYSQL }
 
 extension AppenderTypeToString on AppenderType {
   String valueAsString() {
