@@ -31,5 +31,18 @@ class HttpAppender extends Appender {
     } else {
       level = Level.INFO;
     }
+    if (config.containsKey('url')) {
+      url = config['url'];
+    } else {
+      throw ArgumentError('Missing url argument for HttpAppender');
+    }
+    headers = {};
+    if (config.containsKey('headers')) {
+      List<String> h = config['headers'];
+      for (var s in h) {
+        var splitted = s.split(':');
+        headers.putIfAbsent(splitted.elementAt(0), () => splitted.elementAt(1));
+      }
+    }
   }
 }

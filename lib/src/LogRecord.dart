@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 import 'Level.dart';
 
 class LogRecord {
@@ -25,4 +27,8 @@ class LogRecord {
 
   @override
   String toString() => '[${level.name}] $loggerName: $message';
+
+  String getFormattedTime() {
+    return DateFormat('yyyy-MM-dd HH:mm:ss').format(time);
+  }
 }

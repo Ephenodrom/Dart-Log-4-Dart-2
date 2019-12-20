@@ -28,16 +28,16 @@ class Logger {
   ///
   /// [fileName] has to the the full path to the file.
   ///
-  void initFromFile(String fileName) {
+  void initFromFile(String fileName) async {
     var fileContents = File(fileName).readAsStringSync();
     var jsonData = json.decode(fileContents);
-    init(jsonData);
+    await init(jsonData);
   }
 
   ///
   /// Initialise the logger from the given [config].
   ///
-  void init(Map<String, dynamic> config) {
+  void init(Map<String, dynamic> config) async {
     for (Map<String, dynamic> app in config['appenders']) {
       if (!app.containsKey('type')) {
         throw ArgumentError('Missing type for appender');
@@ -45,27 +45,27 @@ class Logger {
       if (app['type'].toLowerCase() ==
           AppenderType.CONSOLE.valueAsString().toLowerCase()) {
         var console = ConsoleAppender();
-        console.init(app);
+        await console.init(app);
         appenders.add(console);
       } else if (app['type'].toLowerCase() ==
           AppenderType.FILE.valueAsString().toLowerCase()) {
         var file = FileAppender();
-        file.init(app);
+        await file.init(app);
         appenders.add(file);
       } else if (app['type'].toLowerCase() ==
           AppenderType.HTTP.valueAsString().toLowerCase()) {
         var http = HttpAppender();
-        http.init(app);
+        await http.init(app);
         appenders.add(http);
       } else if (app['type'].toLowerCase() ==
           AppenderType.EMAIL.valueAsString().toLowerCase()) {
         var email = EmailAppender();
-        email.init(app);
+        await email.init(app);
         appenders.add(email);
       } else if (app['type'].toLowerCase() ==
           AppenderType.MYSQL.valueAsString().toLowerCase()) {
         var mysql = MySqlAppender();
-        mysql.init(app);
+        await mysql.init(app);
         appenders.add(mysql);
       }
     }
