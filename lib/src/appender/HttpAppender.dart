@@ -23,7 +23,7 @@ class HttpAppender extends Appender {
   }
 
   @override
-  void init(Map<String, dynamic> config) {
+  void init(Map<String, dynamic> config, bool test) {
     created = DateTime.now();
     type = AppenderType.HTTP;
     if (config.containsKey('level')) {

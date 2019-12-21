@@ -33,7 +33,7 @@ class MySqlAppender extends Appender {
   }
 
   @override
-  void init(Map<String, dynamic> config) async {
+  void init(Map<String, dynamic> config, bool test) async {
     created = DateTime.now();
     type = AppenderType.MYSQL;
     if (config.containsKey('level')) {
@@ -69,8 +69,10 @@ class MySqlAppender extends Appender {
     } else {
       throw ArgumentError('Missing table argument for MySqlAppender');
     }
-    connectionSettings = ConnectionSettings(
-        host: host, port: port, user: user, password: password, db: database);
-    connection = await MySqlConnection.connect(connectionSettings);
+    if (!test) {
+      connectionSettings = ConnectionSettings(
+          host: host, port: port, user: user, password: password, db: database);
+      connection = await MySqlConnection.connect(connectionSettings);
+    }
   }
 }

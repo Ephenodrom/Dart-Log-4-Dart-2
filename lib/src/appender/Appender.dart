@@ -10,5 +10,5 @@ abstract class Appender {
 
   void append(LogRecord logRecord);
 
-  void init(Map<String, dynamic> config);
+  void init(Map<String, dynamic> config, bool test);
 }

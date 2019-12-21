@@ -51,7 +51,7 @@ class EmailAppender extends Appender {
   }
 
   @override
-  void init(Map<String, dynamic> config) {
+  void init(Map<String, dynamic> config, bool test) {
     created = DateTime.now();
     type = AppenderType.EMAIL;
     if (config.containsKey('level')) {
@@ -108,9 +108,10 @@ class EmailAppender extends Appender {
     if (config.containsKey('ssl')) {
       ssl = config['ssl'];
     }
-
-    smtpServer = SmtpServer(host,
-        port: port, username: user, password: password, ssl: ssl);
-    connection = PersistentConnection(smtpServer);
+    if (!test) {
+      smtpServer = SmtpServer(host,
+          port: port, username: user, password: password, ssl: ssl);
+      connection = PersistentConnection(smtpServer);
+    }
   }
 }

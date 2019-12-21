@@ -40,7 +40,7 @@ class FileAppender extends Appender {
   }
 
   @override
-  void init(Map<String, dynamic> config) async {
+  void init(Map<String, dynamic> config, bool test) async {
     created = DateTime.now();
     type = AppenderType.FILE;
     if (config.containsKey('format')) {
@@ -67,12 +67,13 @@ class FileAppender extends Appender {
     if (config.containsKey('path')) {
       path = config['path'];
     }
-
-    if (FileSystemEntity.typeSync(_getFullFilename()) ==
-        FileSystemEntityType.notFound) {
-      file = await File(_getFullFilename()).create();
-    } else {
-      file = File(_getFullFilename());
+    if (!test) {
+      if (FileSystemEntity.typeSync(_getFullFilename()) ==
+          FileSystemEntityType.notFound) {
+        file = await File(_getFullFilename()).create();
+      } else {
+        file = File(_getFullFilename());
+      }
     }
   }
 }

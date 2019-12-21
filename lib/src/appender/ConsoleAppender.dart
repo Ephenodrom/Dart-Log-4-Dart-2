@@ -21,7 +21,7 @@ class ConsoleAppender extends Appender {
   }
 
   @override
-  void init(Map<String, dynamic> config) {
+  void init(Map<String, dynamic> config, bool test) {
     created = DateTime.now();
     type = AppenderType.CONSOLE;
     if (config.containsKey('format')) {

@@ -7,7 +7,7 @@ import 'package:log_4_dart_2/src/appender/RotationCycle.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('Test init()', () {
+  test('Test init()', () async {
     var config = {
       'appenders': [
         {'type': 'CONSOLE', 'format': '%d %t %l %m', 'level': 'INFO'},
@@ -45,11 +45,12 @@ void main() {
           'user': 'root',
           'password': 'test',
           'port': 1,
-          'database': 'mydatabase'
+          'database': 'mydatabase',
+          'table': 'log_entries'
         }
       ],
     };
-    Logger().init(config);
+    await Logger().init(config, test: true);
 
     expect(Logger().appenders.length, 5);
 
