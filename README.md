@@ -49,21 +49,23 @@ import 'package:log_4_dart_2/log_4_dart_2.dart';
 
 ### Setup Logger
 
-There are two ways to setup the logger.
+There are two ways to setup the [Logger](/lib/src/Logger.dart).
 
-1) Store the logger configuration in seperate file and pass the full name of the file to the **initFromFile()** method.
-2) Create a **Map** that holds the configuration and pass it to the **init()** method.
+1) Store the logger configuration in seperate json file and pass the full name of the file to the **initFromFile()** method.
+2) Create a **Map<String,dynamic>** that holds the configuration and pass it to the **init()** method.
 
 ```dart
 void main(List<String> arguments){
+  // Init the logger from a configuration file
   Logger().initFromFile('/path/to/log4d.json');
+  // Or by using a Map<String,dynamic>
   Logger().init(config);
 }
 ```
 
 ### Logging
 
-The logger offers multiple methods for logging on different levels.
+The [Logger](/lib/src/Logger.dart) offers multiple methods for logging on different levels.
 
 ```dart
 static String TAG = 'TestClass';
@@ -122,6 +124,8 @@ The [EmailAppender](/lib/src/appender/EmailAppender.dart) sends a log entry via 
 * toBCC = A list of email addresses to receive a blind copy.
 * ssl = Whether to use ssl or not.
 
+Note: Due to the [mailer package](https://pub.dev/packages/mailer) that is used to provide this appender, this works only for mail servers that need authorization by user/password.
+
 ### MySqlAppender
 
 The [MySqlAppender](/lib/src/appender/MySqlAppender.dart) appends every log entry to a table in a mysql database.
@@ -135,7 +139,7 @@ The [MySqlAppender](/lib/src/appender/MySqlAppender.dart) appends every log entr
 * database = The database name.
 * table = The table to write to.
 
-Create the table with the given statement. Replace $table with your desired table name.
+Create the table with the given statement. Replace **$table** with your desired table name.
 
 ```sql
 CREATE TABLE `logging`.`$table` (
@@ -162,6 +166,8 @@ Examples :
 * "This log entry was created on %d from class %t. It has the level %l and the message %m"
 
 ### Example Configuration
+
+Some configuration examples with all possible appenders and their settings.
 
 ```dart
 var config = {
