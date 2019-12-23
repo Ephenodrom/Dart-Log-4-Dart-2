@@ -24,7 +24,7 @@ A dart package for advanced logging, with multiple and configurable appenders.
 
 ## Preamble
 
-Lorem Ipsum
+The package is under construction and still needa some tweeks and code improvements! 
 
 ## Install
 
