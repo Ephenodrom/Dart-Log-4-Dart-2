@@ -9,3 +9,7 @@ export 'src/LogRecord.dart';
 export 'src/appender/ConsoleAppender.dart';
 export 'src/appender/FileAppender.dart';
 export 'src/appender/AppenderType.dart';
+export 'src/appender/MySqlAppender.dart';
+export 'src/appender/EmailAppender.dart';
+export 'src/appender/Appender.dart';
+export 'src/appender/RotationCycle.dart';

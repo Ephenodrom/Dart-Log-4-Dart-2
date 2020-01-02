@@ -17,14 +17,16 @@ A dart package for advanced logging, with multiple and configurable appenders.
    * [HttpAppender](#httpappender)
    * [EmailAppender](#emailappender)
    * [MySqlAppender](#mysqlappender)
+   * [Adding custom appender](#adding-custom-appender)
    * [Log Format](#log-format)
+   * [Rotation Cycle](#rotation-cycle)
    * [Example configuration](#example-configuration)
 6. [Changelog](#changelog)
 7. [Copyright And License](#copyright-and-license)
 
 ## Preamble
 
-The package is under construction and still needa some tweeks and code improvements! 
+The package is under construction and still needa some tweeks and code improvements!
 
 ## Install
 
@@ -34,7 +36,7 @@ Update pubspec.yaml and add the following line to your dependencies.
 
 ```yaml
 dependencies:
-  log_for_dart_2: ^0.1.0
+  log_for_dart_2: ^0.2.0
 ```
 
 ## Import
@@ -97,6 +99,7 @@ The [FileAppender](/lib/src/appender/FileAppender.dart) appends every log entry 
 * filePattern = The pattern used for the filename.
 * fileExtension = The fileextension. Default is "log".
 * path = The path to the file
+* rotationCycle = The rotation cycle for the appender. See [Rotation Cycle](#rotation-cycle). Default ist NEVER.
 
 ### HttpAppender
 
@@ -151,6 +154,33 @@ CREATE TABLE `logging`.`$table` (
   PRIMARY KEY (`id`));
 ```
 
+### Adding custom appender
+
+Log4Dart2 supports the usage of custom appenders. Create a class that extends the [Appender](/lib/src/appender/Appender.dart) and implements the **append** and **init** methods.
+
+```dart
+import 'package:log_4_dart_2/log_4_dart_2.dart';
+
+class CustomAppender extends Appender {
+  @override
+  void append(LogRecord logRecord) {
+    // TODO: implement append
+  }
+
+  @override
+  void init(Map<String, dynamic> config, bool test, DateTime date) {
+    // TODO: implement init. Not necessary!
+  }
+}
+```
+
+Add the custom appender to the Logger via the **addCustomAppender** method.
+
+```dart
+var customAppender = CustomAppender();
+Logger().addCustomAppender(customAppender);
+```
+
 ### Log format
 
 The format of the log entrys can be configured for some appender.
@@ -164,6 +194,16 @@ Examples :
 
 * "%d %t %l %m"
 * "This log entry was created on %d from class %t. It has the level %l and the message %m"
+
+### Rotation Cycle
+
+The rotation cycle can be configured for some appender. It defines how offen a new file is created to store the logging data.
+
+* NEVER (Never rotate)
+* DAY (Rotate on a daily basis)
+* WEEK (Rotate on weekly basis)
+* MONTH (Rotate on monthly basis every first day of the month)
+* YEAR (Rotate on a yearly basis every first day of the year)
 
 ### Example Configuration
 
@@ -184,6 +224,7 @@ var config = {
       'filePattern': 'log4dart2_log',
       'fileExtension': 'txt',
       'path': '/path/to/'
+      'rotationCycle': 'MONTH'
     },
     {
       'type': 'EMAIL',
@@ -244,7 +285,8 @@ var config = {
       "level": "INFO",
       "filePattern": "log4dart2_log",
       "fileExtension": "txt",
-      "path": "/path/to/"
+      "path": "/path/to/",
+      "rotationCycle": "MONTH"
     },
     {
       "type": "EMAIL",

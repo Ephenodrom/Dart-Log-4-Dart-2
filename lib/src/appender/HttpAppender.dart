@@ -8,7 +8,10 @@ import 'package:log_4_dart_2/src/appender/Appender.dart';
 /// A appender for sending log entries via http
 ///
 class HttpAppender extends Appender {
+  /// The destination for the http post request
   String url;
+
+  /// The headers to send with the request
   Map<String, String> headers;
 
   @override
@@ -23,8 +26,8 @@ class HttpAppender extends Appender {
   }
 
   @override
-  void init(Map<String, dynamic> config, bool test) {
-    created = DateTime.now();
+  void init(Map<String, dynamic> config, bool test, DateTime date) {
+    created = date ?? DateTime.now();
     type = AppenderType.HTTP;
     if (config.containsKey('level')) {
       level = Level.fromString(config['level']);

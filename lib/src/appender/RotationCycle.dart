@@ -14,17 +14,6 @@ enum RotationCycle {
   /// Rotate on monthly basis every first day of the month
   MONTH,
 
-  /// Rotate on a yearly basis every first january
+  /// Rotate on a yearly basis every first day of the year
   YEAR
-}
-
-extension RotationCycleFromStringParser on String {
-  ///
-  /// Converts the string to a RotationCycle value. If no value matches the string it will return [RotationCycle.NEVER].
-  ///
-  RotationCycle toRotationCycle() {
-    return RotationCycle.values.firstWhere(
-        (e) => e.toString().toLowerCase() == toLowerCase(),
-        orElse: () => RotationCycle.NEVER);
-  }
 }

@@ -1,3 +1,6 @@
+///
+/// The appender type
+///
 enum AppenderType { CONSOLE, FILE, HTTP, EMAIL, MYSQL }
 
 extension AppenderTypeToString on AppenderType {

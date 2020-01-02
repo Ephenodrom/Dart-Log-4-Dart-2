@@ -37,7 +37,8 @@ class Logger {
   ///
   /// Initialise the logger from the given [config].
   ///
-  void init(Map<String, dynamic> config, {bool test = false}) async {
+  void init(Map<String, dynamic> config,
+      {bool test = false, DateTime date}) async {
     for (Map<String, dynamic> app in config['appenders']) {
       if (!app.containsKey('type')) {
         throw ArgumentError('Missing type for appender');
@@ -45,27 +46,27 @@ class Logger {
       if (app['type'].toLowerCase() ==
           AppenderType.CONSOLE.valueAsString().toLowerCase()) {
         var console = ConsoleAppender();
-        await console.init(app, test);
+        await console.init(app, test, date);
         appenders.add(console);
       } else if (app['type'].toLowerCase() ==
           AppenderType.FILE.valueAsString().toLowerCase()) {
         var file = FileAppender();
-        await file.init(app, test);
+        await file.init(app, test, date);
         appenders.add(file);
       } else if (app['type'].toLowerCase() ==
           AppenderType.HTTP.valueAsString().toLowerCase()) {
         var http = HttpAppender();
-        await http.init(app, test);
+        await http.init(app, test, date);
         appenders.add(http);
       } else if (app['type'].toLowerCase() ==
           AppenderType.EMAIL.valueAsString().toLowerCase()) {
         var email = EmailAppender();
-        await email.init(app, test);
+        await email.init(app, test, date);
         appenders.add(email);
       } else if (app['type'].toLowerCase() ==
           AppenderType.MYSQL.valueAsString().toLowerCase()) {
         var mysql = MySqlAppender();
-        await mysql.init(app, test);
+        await mysql.init(app, test, date);
         appenders.add(mysql);
       }
     }
@@ -126,4 +127,11 @@ class Logger {
   void fatal(String tag, message,
           [Object error, StackTrace stackTrace, Object object]) =>
       log(Level.FATAL, tag, message, error, stackTrace, object);
+
+  ///
+  /// Adds a custom appender to the list of appenders
+  ///
+  void addCustomAppender(Appender appender) {
+    appenders.add(appender);
+  }
 }

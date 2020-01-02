@@ -33,8 +33,8 @@ class MySqlAppender extends Appender {
   }
 
   @override
-  void init(Map<String, dynamic> config, bool test) async {
-    created = DateTime.now();
+  void init(Map<String, dynamic> config, bool test, DateTime date) async {
+    created = date ?? DateTime.now();
     type = AppenderType.MYSQL;
     if (config.containsKey('level')) {
       level = Level.fromString(config['level']);

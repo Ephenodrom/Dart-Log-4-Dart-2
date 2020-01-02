@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:basic_utils/basic_utils.dart';
+import 'package:intl/intl.dart';
 import 'package:log_4_dart_2/src/LogRecord.dart';
 import 'package:log_4_dart_2/src/LogRecordFormatter.dart';
 import 'package:log_4_dart_2/src/appender/Appender.dart';
@@ -7,6 +9,7 @@ import 'package:log_4_dart_2/src/appender/AppenderType.dart';
 import 'package:log_4_dart_2/src/appender/RotationCycle.dart';
 
 import '../../log_4_dart_2.dart';
+import '../Utils.dart';
 
 ///
 /// A appender for writing logs to a logfile
@@ -21,16 +24,67 @@ class FileAppender extends Appender {
   /// The path where the file(s) is/are stored
   String path = '';
 
+  /// The rotation cycle
   RotationCycle rotationCycle = RotationCycle.NEVER;
 
+  /// The current file for the appender
   File file;
 
+  ///
+  /// Returns the full file name of the current logfile
+  ///
   String _getFullFilename() {
-    return path + filePattern + '.' + fileExtension;
+    switch (rotationCycle) {
+      case RotationCycle.NEVER:
+        return path + filePattern + '.' + fileExtension;
+      case RotationCycle.DAY:
+        return path +
+            filePattern +
+            '_' +
+            DateFormat('yyyy-MM-dd').format(created) +
+            '.' +
+            fileExtension;
+      case RotationCycle.WEEK:
+        return path +
+            filePattern +
+            '_' +
+            created.year.toString() +
+            '-CW' +
+            DateUtils.getCalendarWeek(created).toString() +
+            '.' +
+            fileExtension;
+
+      case RotationCycle.MONTH:
+        return path +
+            filePattern +
+            '_' +
+            DateFormat('yyyy-MM').format(created) +
+            '.' +
+            fileExtension;
+      case RotationCycle.YEAR:
+        return path +
+            filePattern +
+            '_' +
+            DateFormat('yyyy').format(created) +
+            '.' +
+            fileExtension;
+    }
+    return '';
   }
 
   @override
   void append(LogRecord logRecord) async {
+    switch (rotationCycle) {
+      case RotationCycle.NEVER:
+        // Do nothing
+        break;
+      case RotationCycle.DAY:
+      case RotationCycle.WEEK:
+      case RotationCycle.MONTH:
+      case RotationCycle.YEAR:
+        await checkForFileChange();
+        break;
+    }
     file.writeAsStringSync(LogRecordFormatter.format(logRecord, format) + '\n',
         mode: FileMode.append);
     if (logRecord.stackTrace != null) {
@@ -40,8 +94,8 @@ class FileAppender extends Appender {
   }
 
   @override
-  void init(Map<String, dynamic> config, bool test) async {
-    created = DateTime.now();
+  void init(Map<String, dynamic> config, bool test, DateTime date) async {
+    created = date ?? DateTime.now();
     type = AppenderType.FILE;
     if (config.containsKey('format')) {
       format = config['format'];
@@ -57,7 +111,7 @@ class FileAppender extends Appender {
       fileExtension = config['fileExtension'];
     }
     if (config.containsKey('rotationCycle')) {
-      rotationCycle = config['rotationCycle'].toRotationCycle();
+      rotationCycle = Utils.getRotationCycleFromString(config['rotationCycle']);
     }
     if (config.containsKey('level')) {
       level = Level.fromString(config['level']);
@@ -74,6 +128,49 @@ class FileAppender extends Appender {
       } else {
         file = File(_getFullFilename());
       }
+    }
+  }
+
+  ///
+  /// Check whether to create a new logfile depending on the [RotationCycle].
+  ///
+  void checkForFileChange() async {
+    var now = DateTime.now();
+    var create = false;
+    switch (rotationCycle) {
+      case RotationCycle.NEVER:
+        return;
+      case RotationCycle.DAY:
+        if (now.year > created.year || now.month > created.month) {
+          create = true;
+        } else if (now.day > created.day) {
+          create = true;
+        }
+        break;
+      case RotationCycle.WEEK:
+        if (now.year > created.year) {
+          create = true;
+        } else if (DateUtils.getCalendarWeek(now) >
+            DateUtils.getCalendarWeek(created)) {
+          create = true;
+        }
+        break;
+      case RotationCycle.MONTH:
+        if (now.year > created.year) {
+          create = true;
+        } else if (now.month > created.month) {
+          create = true;
+        }
+        break;
+      case RotationCycle.YEAR:
+        if (now.year > created.year) {
+          create = true;
+        }
+        break;
+    }
+    if (create) {
+      created = now;
+      file = await File(_getFullFilename()).create();
     }
   }
 }

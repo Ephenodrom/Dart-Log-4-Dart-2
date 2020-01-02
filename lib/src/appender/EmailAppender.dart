@@ -51,8 +51,8 @@ class EmailAppender extends Appender {
   }
 
   @override
-  void init(Map<String, dynamic> config, bool test) {
-    created = DateTime.now();
+  void init(Map<String, dynamic> config, bool test, DateTime date) {
+    created = date ?? DateTime.now();
     type = AppenderType.EMAIL;
     if (config.containsKey('level')) {
       level = Level.fromString(config['level']);
