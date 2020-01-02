@@ -39,6 +39,7 @@ class Logger {
   ///
   void init(Map<String, dynamic> config,
       {bool test = false, DateTime date}) async {
+    reset();
     for (Map<String, dynamic> app in config['appenders']) {
       if (!app.containsKey('type')) {
         throw ArgumentError('Missing type for appender');
@@ -133,5 +134,12 @@ class Logger {
   ///
   void addCustomAppender(Appender appender) {
     appenders.add(appender);
+  }
+
+  ///
+  /// Resets the logger and remove all appender and their configuration
+  ///
+  void reset() {
+    appenders.clear();
   }
 }
