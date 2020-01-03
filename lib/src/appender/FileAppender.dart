@@ -28,7 +28,7 @@ class FileAppender extends Appender {
   RotationCycle rotationCycle = RotationCycle.NEVER;
 
   /// The current file for the appender
-  File file;
+  File _file;
 
   ///
   /// Returns the full file name of the current logfile
@@ -85,10 +85,10 @@ class FileAppender extends Appender {
         await checkForFileChange();
         break;
     }
-    file.writeAsStringSync(LogRecordFormatter.format(logRecord, format) + '\n',
+    _file.writeAsStringSync(LogRecordFormatter.format(logRecord, format) + '\n',
         mode: FileMode.append);
     if (logRecord.stackTrace != null) {
-      file.writeAsStringSync(logRecord.stackTrace.toString() + '\n',
+      _file.writeAsStringSync(logRecord.stackTrace.toString() + '\n',
           mode: FileMode.append);
     }
   }
@@ -124,9 +124,9 @@ class FileAppender extends Appender {
     if (!test) {
       if (FileSystemEntity.typeSync(_getFullFilename()) ==
           FileSystemEntityType.notFound) {
-        file = await File(_getFullFilename()).create();
+        _file = await File(_getFullFilename()).create();
       } else {
-        file = File(_getFullFilename());
+        _file = File(_getFullFilename());
       }
     }
   }
@@ -170,7 +170,7 @@ class FileAppender extends Appender {
     }
     if (create) {
       created = now;
-      file = await File(_getFullFilename()).create();
+      _file = await File(_getFullFilename()).create();
     }
   }
 }

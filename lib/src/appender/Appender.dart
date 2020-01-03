@@ -20,9 +20,13 @@ abstract class Appender {
   /// The default logging format
   static String defaultFormat = '%d %t %l %m';
 
+  ///
   /// Appending the given [logRecord]
+  ///
   void append(LogRecord logRecord);
 
-  /// Setup the appender
+  ///
+  /// Setup the appender. This needs to be called for every appender to configure the appender with the necessary data.
+  ///
   void init(Map<String, dynamic> config, bool test, DateTime date);
 }

@@ -7,18 +7,30 @@ import 'package:mysql1/mysql1.dart';
 /// A appender to store log entries in a mysql database
 ///
 class MySqlAppender extends Appender {
+  /// The host for the mysql database
   String host;
+
+  /// The user for the database
   String user;
+
+  /// The password of the user for the database
   String password;
+
+  /// The port of the database
   int port;
+
+  /// The database name on the host
   String database;
+
+  /// The table name to log to
   String table;
-  MySqlConnection connection;
-  ConnectionSettings connectionSettings;
+
+  MySqlConnection _connection;
+  ConnectionSettings _connectionSettings;
 
   @override
   void append(LogRecord logRecord) async {
-    await connection.query(
+    await _connection.query(
         'insert into $table (tag, level, message, time) values (?, ?, ?, ?)', [
       logRecord.loggerName,
       logRecord.level.name,
@@ -70,9 +82,9 @@ class MySqlAppender extends Appender {
       throw ArgumentError('Missing table argument for MySqlAppender');
     }
     if (!test) {
-      connectionSettings = ConnectionSettings(
+      _connectionSettings = ConnectionSettings(
           host: host, port: port, user: user, password: password, db: database);
-      connection = await MySqlConnection.connect(connectionSettings);
+      _connection = await MySqlConnection.connect(_connectionSettings);
     }
   }
 }

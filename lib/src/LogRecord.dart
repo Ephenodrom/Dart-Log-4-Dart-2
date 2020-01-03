@@ -3,7 +3,10 @@ import 'package:intl/intl.dart';
 import 'Level.dart';
 
 class LogRecord {
+  /// The log level
   final Level level;
+
+  /// The message
   final String message;
 
   /// Non-string message passed to Logger.
@@ -28,6 +31,9 @@ class LogRecord {
   @override
   String toString() => '[${level.name}] $loggerName: $message';
 
+  ///
+  /// Returns the log time in the format yyyy-MM-dd HH:mm:ss
+  ///
   String getFormattedTime() {
     return DateFormat('yyyy-MM-dd HH:mm:ss').format(time);
   }

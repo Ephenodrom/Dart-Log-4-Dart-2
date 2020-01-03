@@ -6,26 +6,28 @@ import 'package:log_4_dart_2/log_4_dart_2.dart';
 import '../log_4_dart_2.dart';
 
 class LogRecordFormatter {
+  ///
+  /// Converts the given [logRecord] to the given [format]
+  ///
   static String format(LogRecord logRecord, String format) {
-    var formatted = format;
-    if (formatted.contains('\%d')) {
+    if (format.contains('\%d')) {
       var date = DateFormat('yyyy-MM-dd HH:mm:ss').format(logRecord.time);
-      formatted = formatted.replaceAll('\%d', date);
+      format = format.replaceAll('\%d', date);
     }
-    if (formatted.contains('\%t')) {
-      formatted = formatted.replaceAll('\%t', logRecord.loggerName);
+    if (format.contains('\%t')) {
+      format = format.replaceAll('\%t', logRecord.loggerName);
     }
-    if (formatted.contains('\%l')) {
-      formatted = formatted.replaceAll('\%l', logRecord.level.name);
+    if (format.contains('\%l')) {
+      format = format.replaceAll('\%l', logRecord.level.name);
     }
-    if (formatted.contains('\%m')) {
-      formatted = formatted.replaceAll('\%m', logRecord.message);
+    if (format.contains('\%m')) {
+      format = format.replaceAll('\%m', logRecord.message);
     }
-    return formatted;
+    return format;
   }
 
   ///
-  /// Converts the given [logRecord] to a json strin for the [HttpAppender].
+  /// Converts the given [logRecord] to a json string for the [HttpAppender].
   ///
   static String formatJson(LogRecord logRecord) {
     var map = {

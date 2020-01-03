@@ -20,8 +20,8 @@ class EmailAppender extends Appender {
   List<Address> toCC;
   List<Address> toBCC;
   bool ssl = false;
-  SmtpServer smtpServer;
-  PersistentConnection connection;
+  SmtpServer _smtpServer;
+  PersistentConnection _connection;
 
   @override
   void append(LogRecord logRecord) async {
@@ -38,7 +38,7 @@ class EmailAppender extends Appender {
     }
 
     try {
-      await connection.send(message);
+      await _connection.send(message);
     } catch (e) {
       print(e);
       return;
@@ -109,9 +109,9 @@ class EmailAppender extends Appender {
       ssl = config['ssl'];
     }
     if (!test) {
-      smtpServer = SmtpServer(host,
+      _smtpServer = SmtpServer(host,
           port: port, username: user, password: password, ssl: ssl);
-      connection = PersistentConnection(smtpServer);
+      _connection = PersistentConnection(_smtpServer);
     }
   }
 }

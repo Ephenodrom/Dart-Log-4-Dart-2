@@ -17,16 +17,16 @@ A dart package for advanced logging, with multiple and configurable appenders.
    * [HttpAppender](#httpappender)
    * [EmailAppender](#emailappender)
    * [MySqlAppender](#mysqlappender)
-   * [Adding custom appender](#adding-custom-appender)
+   * [Adding Custom Appender](#adding-custom-appender)
    * [Log Format](#log-format)
    * [Rotation Cycle](#rotation-cycle)
-   * [Example configuration](#example-configuration)
+   * [Example Configuration](#example-configuration)
 6. [Changelog](#changelog)
 7. [Copyright And License](#copyright-and-license)
 
 ## Preamble
 
-The package is under construction and still needa some tweeks and code improvements!
+The package is under construction and still needs some tweeks and code improvements!
 
 ## Install
 
@@ -65,6 +65,8 @@ void main(List<String> arguments){
 }
 ```
 
+Take a look at [Example Configuration](#example-configuration) for a full example.
+
 ### Logging
 
 The [Logger](/lib/src/Logger.dart) offers multiple methods for logging on different levels.
@@ -101,6 +103,8 @@ The [FileAppender](/lib/src/appender/FileAppender.dart) appends every log entry 
 * path = The path to the file
 * rotationCycle = The rotation cycle for the appender. See [Rotation Cycle](#rotation-cycle). Default ist NEVER.
 
+**Note**: If a path was specified, it must also exist!
+
 ### HttpAppender
 
 The [HttpAppender](/lib/src/appender/HttpAppender.dart) sends a log entry via **HTTP POST** request to a given url.
@@ -127,7 +131,7 @@ The [EmailAppender](/lib/src/appender/EmailAppender.dart) sends a log entry via 
 * toBCC = A list of email addresses to receive a blind copy.
 * ssl = Whether to use ssl or not.
 
-Note: Due to the [mailer package](https://pub.dev/packages/mailer) that is used to provide this appender, this works only for mail servers that need authorization by user/password.
+**Note**: Due to the [mailer package](https://pub.dev/packages/mailer) that is used to provide this appender, this works only for mail servers that need authorization by user/password.
 
 ### MySqlAppender
 
@@ -145,7 +149,7 @@ The [MySqlAppender](/lib/src/appender/MySqlAppender.dart) appends every log entr
 Create the table with the given statement. Replace **$table** with your desired table name.
 
 ```sql
-CREATE TABLE `logging`.`$table` (
+CREATE TABLE `$table` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `tag` VARCHAR(45) NULL,
   `level` VARCHAR(45) NULL,
@@ -154,7 +158,7 @@ CREATE TABLE `logging`.`$table` (
   PRIMARY KEY (`id`));
 ```
 
-### Adding custom appender
+### Adding Custom Appender
 
 Log4Dart2 supports the usage of custom appenders. Create a class that extends the [Appender](/lib/src/appender/Appender.dart) and implements the **append** and **init** methods.
 
@@ -181,7 +185,7 @@ var customAppender = CustomAppender();
 Logger().addCustomAppender(customAppender);
 ```
 
-### Log format
+### Log Format
 
 The format of the log entrys can be configured for some appender.
 
@@ -341,7 +345,7 @@ For a detailed changelog, see the [CHANGELOG.md](CHANGELOG.md) file
 
 MIT License
 
-Copyright (c) 2019 Ephenodrom
+Copyright (c) 2020 Ephenodrom
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

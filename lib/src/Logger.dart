@@ -13,6 +13,7 @@ import 'Level.dart';
 /// The logger
 ///
 class Logger {
+  /// All appenders for the logger
   List<Appender> appenders = [];
 
   static final Logger _singleton = Logger._internal();

@@ -72,6 +72,11 @@ class Level implements Comparable<Level> {
   @override
   String toString() => name;
 
+  ///
+  /// Converts the given String [s] to the log level.
+  ///
+  /// Returns null if no log level was found.
+  ///
   static Level fromString(String s) {
     for (var l in LEVELS) {
       if (l.name.toLowerCase() == s.toLowerCase()) {
