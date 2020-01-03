@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.1 - 2020-01-03
+
+- Improve documentation
+
 ## 0.2.0 - 2020-01-02
 
 - Add rotation cycle to the FileAppender

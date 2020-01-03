@@ -36,7 +36,7 @@ Update pubspec.yaml and add the following line to your dependencies.
 
 ```yaml
 dependencies:
-  log_for_dart_2: ^0.2.0
+  log_for_dart_2: ^0.2.1
 ```
 
 ## Import
