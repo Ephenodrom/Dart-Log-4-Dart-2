@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.1 - 2020-01-07
+
+- Improve initialization of the logger
+
 ## 0.3.0 - 2020-01-07
 
 - Add unique identifier to log format (#3)
