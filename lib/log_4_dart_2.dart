@@ -13,3 +13,4 @@ export 'src/appender/MySqlAppender.dart';
 export 'src/appender/EmailAppender.dart';
 export 'src/appender/Appender.dart';
 export 'src/appender/RotationCycle.dart';
+export 'src/appender/HttpAppender.dart';

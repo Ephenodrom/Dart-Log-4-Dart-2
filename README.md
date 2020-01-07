@@ -53,20 +53,11 @@ import 'package:log_4_dart_2/log_4_dart_2.dart';
 
 There are two ways to setup the [Logger](/lib/src/Logger.dart).
 
-1) Register all appender you want to use within your logger with the **registerAllAppender()** method.
-2) Store the logger configuration in seperate json file and pass the full name of the file to the **initFromFile()** method.
-3) Create a **Map<String,dynamic>** that holds the configuration and pass it to the **init()** method.
+1) Store the logger configuration in seperate json file and pass the full name of the file to the **initFromFile()** method.
+2) Create a **Map<String,dynamic>** that holds the configuration and pass it to the **init()** method.
 
 ```dart
 void main(List<String> arguments){
-  // Register all appender you want to use
-  Logger().registerAllAppender([
-    ConsoleAppender(),
-    FileAppender(),
-    HttpAppender(),
-    EmailAppender(),
-    MySqlAppender()
-  ]);
   // Init the logger from a configuration file
   Logger().initFromFile('/path/to/log4d.json');
   // Or by using a Map<String,dynamic>

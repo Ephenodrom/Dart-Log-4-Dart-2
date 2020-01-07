@@ -43,6 +43,15 @@ class Logger {
   ///
   void init(Map<String, dynamic> config,
       {bool test = false, DateTime date}) async {
+    if (registeredAppenders.isEmpty) {
+      registerAllAppender([
+        ConsoleAppender(),
+        FileAppender(),
+        HttpAppender(),
+        EmailAppender(),
+        MySqlAppender()
+      ]);
+    }
     reset();
     for (Map<String, dynamic> app in config['appenders']) {
       if (!app.containsKey('type')) {
