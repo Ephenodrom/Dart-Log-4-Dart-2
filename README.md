@@ -36,7 +36,7 @@ Update pubspec.yaml and add the following line to your dependencies.
 
 ```yaml
 dependencies:
-  log_for_dart_2: ^0.2.1
+  log_for_dart_2: ^0.3.0
 ```
 
 ## Import
@@ -53,11 +53,20 @@ import 'package:log_4_dart_2/log_4_dart_2.dart';
 
 There are two ways to setup the [Logger](/lib/src/Logger.dart).
 
-1) Store the logger configuration in seperate json file and pass the full name of the file to the **initFromFile()** method.
-2) Create a **Map<String,dynamic>** that holds the configuration and pass it to the **init()** method.
+1) Register all appender you want to use within your logger with the **registerAllAppender()** method.
+2) Store the logger configuration in seperate json file and pass the full name of the file to the **initFromFile()** method.
+3) Create a **Map<String,dynamic>** that holds the configuration and pass it to the **init()** method.
 
 ```dart
 void main(List<String> arguments){
+  // Register all appender you want to use
+  Logger().registerAllAppender([
+    ConsoleAppender(),
+    FileAppender(),
+    HttpAppender(),
+    EmailAppender(),
+    MySqlAppender()
+  ]);
   // Init the logger from a configuration file
   Logger().initFromFile('/path/to/log4d.json');
   // Or by using a Map<String,dynamic>
@@ -88,6 +97,7 @@ Logger().fatal(TAG, 'Lorem Ipsum');
 The [ConsoleAppender](/lib/src/appender/ConsoleAppender.dart) is a simple appender that appends every log entry to the console output.
 
 * type = The type of the appender. This has to be set to **CONSOLE**.
+* dateFormat = The date format used for the appender. Default = yyyy-MM-dd HH:mm:ss.
 * level = The loglevel for this appender.
 * format = The format for the log output. See [Log format](#log-format) for more information
 
@@ -98,6 +108,7 @@ The [FileAppender](/lib/src/appender/FileAppender.dart) appends every log entry 
 * type = The type of the appender. This has to be set to **FILE**.
 * level = The loglevel for this appender.
 * format = The format for the log output. See [Log format](#log-format) for more information
+* dateFormat = The date format used for the appender. Default = yyyy-MM-dd HH:mm:ss.
 * filePattern = The pattern used for the filename.
 * fileExtension = The fileextension. Default is "log".
 * path = The path to the file
@@ -110,6 +121,7 @@ The [FileAppender](/lib/src/appender/FileAppender.dart) appends every log entry 
 The [HttpAppender](/lib/src/appender/HttpAppender.dart) sends a log entry via **HTTP POST** request to a given url.
 
 * type = The type of the appender. This has to be set to **HTTP**.
+* dateFormat = The date format used for the appender. Default = yyyy-MM-dd HH:mm:ss.
 * level = The loglevel for this appender.
 * url = The url for the POST request.
 * headers = A list of headers where the name and value of the header a seperated by a ":". Example "Content-Type:application/json"
@@ -119,6 +131,7 @@ The [HttpAppender](/lib/src/appender/HttpAppender.dart) sends a log entry via **
 The [EmailAppender](/lib/src/appender/EmailAppender.dart) sends a log entry via email to a given address.
 
 * type = The type of the appender. This has to be set to **EMAIL**.
+* dateFormat = The date format used for the appender. Default = yyyy-MM-dd HH:mm:ss.
 * level = The loglevel for this appender.
 * host = The smtp server.
 * user = The user for this server.
@@ -173,16 +186,25 @@ class CustomAppender extends Appender {
 
   @override
   void init(Map<String, dynamic> config, bool test, DateTime date) {
-    // TODO: implement init. Not necessary!
+    // TODO: implement init.
+  }
+
+  @override
+  Appender getInstance(){
+    return CustomAppender();
+  }
+
+  @override
+  String getType(){
+    return 'CustomAppender';
   }
 }
 ```
 
-Add the custom appender to the Logger via the **addCustomAppender** method.
+Register the custom appender in the Logger via the **registerAppender()** method before the logger is initialized.
 
 ```dart
-var customAppender = CustomAppender();
-Logger().addCustomAppender(customAppender);
+Logger().registerAppender(CustomAppender());
 ```
 
 ### Log Format
@@ -190,14 +212,15 @@ Logger().addCustomAppender(customAppender);
 The format of the log entrys can be configured for some appender.
 
 * %d = The date
+* %i = The identifier
 * %t = The tag
 * %l = The log level
 * %m = The message
 
 Examples :
 
-* "%d %t %l %m"
-* "This log entry was created on %d from class %t. It has the level %l and the message %m"
+* "%d %i %t %l %m"
+* "This log entry was created on %d from class %t from thread %i. It has the level %l and the message %m"
 
 ### Rotation Cycle
 
@@ -218,12 +241,14 @@ var config = {
   'appenders': [
     {
       'type': 'CONSOLE',
-      'format': '%d %t %l %m',
+      'dateFormat' : 'yyyy-MM-dd HH:mm:ss',
+      'format': '%d %i %t %l %m',
       'level': 'INFO'
     },
     {
       'type': 'FILE',
-      'format': '%d %t %l %m',
+      'dateFormat' : 'yyyy-MM-dd HH:mm:ss',
+      'format': '%d %i %t %l %m',
       'level': 'INFO',
       'filePattern': 'log4dart2_log',
       'fileExtension': 'txt',
@@ -232,6 +257,7 @@ var config = {
     },
     {
       'type': 'EMAIL',
+      'dateFormat' : 'yyyy-MM-dd HH:mm:ss',
       'level': 'INFO',
       'host': 'smtp.test.de',
       'user': 'test@test.de',
@@ -255,6 +281,7 @@ var config = {
     },
     {
       'type': 'HTTP',
+      'dateFormat' : 'yyyy-MM-dd HH:mm:ss',
       'level': 'INFO',
       'url': 'api.example.com',
       'headers': [
@@ -280,12 +307,14 @@ var config = {
   "appenders": [
     {
       "type": "CONSOLE",
-      "format": "%d %t %l %m",
+      "dateFormat" : "yyyy-MM-dd HH:mm:ss",
+      "format": "%d %i %t %l %m",
       "level": "INFO"
     },
     {
       "type": "FILE",
-      "format": "%d %t %l %m",
+      "dateFormat" : "yyyy-MM-dd HH:mm:ss",
+      "format": "%d %i %t %l %m",
       "level": "INFO",
       "filePattern": "log4dart2_log",
       "fileExtension": "txt",
@@ -294,6 +323,7 @@ var config = {
     },
     {
       "type": "EMAIL",
+      "dateFormat" : "yyyy-MM-dd HH:mm:ss",
       "level": "INFO",
       "host": "smtp.test.de",
       "user": "test@test.de",
@@ -317,6 +347,7 @@ var config = {
     },
     {
       "type": "HTTP",
+      "dateFormat" : "yyyy-MM-dd HH:mm:ss",
       "level": "INFO",
       "url": "api.example.com",
       "headers": [

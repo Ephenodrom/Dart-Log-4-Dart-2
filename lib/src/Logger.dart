@@ -3,18 +3,21 @@ import 'dart:io';
 
 import 'package:log_4_dart_2/log_4_dart_2.dart';
 import 'package:log_4_dart_2/src/appender/Appender.dart';
-import 'package:log_4_dart_2/src/appender/EmailAppender.dart';
-import 'package:log_4_dart_2/src/appender/HttpAppender.dart';
-import 'package:log_4_dart_2/src/appender/MySqlAppender.dart';
 
 import 'Level.dart';
 
 ///
-/// The logger
+/// The logger.
 ///
 class Logger {
-  /// All appenders for the logger
+  /// All appenders for the logger.
   List<Appender> appenders = [];
+
+  /// All registered appenders for the logger.
+  List<Appender> registeredAppenders = [];
+
+  /// An identifier that is passed to each log record. It can be used to connect log entries to a certain event in an application.
+  String identifier;
 
   static final Logger _singleton = Logger._internal();
 
@@ -45,31 +48,12 @@ class Logger {
       if (!app.containsKey('type')) {
         throw ArgumentError('Missing type for appender');
       }
-      if (app['type'].toLowerCase() ==
-          AppenderType.CONSOLE.valueAsString().toLowerCase()) {
-        var console = ConsoleAppender();
-        await console.init(app, test, date);
-        appenders.add(console);
-      } else if (app['type'].toLowerCase() ==
-          AppenderType.FILE.valueAsString().toLowerCase()) {
-        var file = FileAppender();
-        await file.init(app, test, date);
-        appenders.add(file);
-      } else if (app['type'].toLowerCase() ==
-          AppenderType.HTTP.valueAsString().toLowerCase()) {
-        var http = HttpAppender();
-        await http.init(app, test, date);
-        appenders.add(http);
-      } else if (app['type'].toLowerCase() ==
-          AppenderType.EMAIL.valueAsString().toLowerCase()) {
-        var email = EmailAppender();
-        await email.init(app, test, date);
-        appenders.add(email);
-      } else if (app['type'].toLowerCase() ==
-          AppenderType.MYSQL.valueAsString().toLowerCase()) {
-        var mysql = MySqlAppender();
-        await mysql.init(app, test, date);
-        appenders.add(mysql);
+      for (var a in registeredAppenders) {
+        if (app['type'].toLowerCase() == a.getType().toLowerCase()) {
+          var appender = a.getInstance();
+          await appender.init(app, test, date);
+          appenders.add(appender);
+        }
       }
     }
   }
@@ -80,7 +64,10 @@ class Logger {
   void log(Level logLevel, String tag, message,
       [Object error, StackTrace stackTrace, Object object]) {
     var record = LogRecord(logLevel, message, tag,
-        error: error, stackTrace: stackTrace, object: object);
+        error: error,
+        stackTrace: stackTrace,
+        object: object,
+        identifier: identifier);
     for (var app in appenders) {
       if (logLevel >= app.level) {
         app.append(record);
@@ -131,16 +118,30 @@ class Logger {
       log(Level.FATAL, tag, message, error, stackTrace, object);
 
   ///
-  /// Adds a custom appender to the list of appenders
+  /// Adds a custom appender to the list of appenders.
   ///
   void addCustomAppender(Appender appender) {
     appenders.add(appender);
   }
 
   ///
-  /// Resets the logger and remove all appender and their configuration
+  /// Resets the logger and remove all appender and their configuration.
   ///
   void reset() {
     appenders.clear();
+  }
+
+  ///
+  /// Register an appender for the logger.
+  ///
+  void registerAppender(Appender appender) {
+    registeredAppenders.add(appender);
+  }
+
+  ///
+  /// Register a list of appender for the logger.
+  ///
+  void registerAllAppender(List<Appender> appender) {
+    registeredAppenders.addAll(appender);
   }
 }

@@ -24,8 +24,18 @@ class LogRecord {
   /// Associated stackTrace (if any) when recording errors messages.
   final StackTrace stackTrace;
 
+  /// A unique identifier, that can be used to connect log entries to a certain event in an application.
+  final String identifier;
+
+  /// The dateformat for the time the record was created.
+  final String dateFormat;
+
   LogRecord(this.level, this.message, this.loggerName,
-      {this.error, this.stackTrace, this.object})
+      {this.error,
+      this.stackTrace,
+      this.object,
+      this.identifier,
+      this.dateFormat})
       : time = DateTime.now();
 
   @override

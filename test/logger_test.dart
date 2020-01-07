@@ -50,6 +50,13 @@ void main() {
         }
       ],
     };
+    Logger().registerAllAppender([
+      ConsoleAppender(),
+      FileAppender(),
+      HttpAppender(),
+      EmailAppender(),
+      MySqlAppender()
+    ]);
     await Logger().init(config, test: true);
 
     expect(Logger().appenders.length, 5);

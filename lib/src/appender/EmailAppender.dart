@@ -29,7 +29,7 @@ class EmailAppender extends Appender {
       ..from = Address(fromMail, fromName)
       ..recipients.addAll(to)
       ..subject = 'Logger ${logRecord.level} at ${logRecord.getFormattedTime()}'
-      ..text = LogRecordFormatter.formatJson(logRecord);
+      ..text = LogRecordFormatter.formatJson(logRecord, dateFormat: dateFormat);
     if (IterableUtils.isNotNullOrEmpty(toCC)) {
       message.ccRecipients.addAll(toCC);
     }
@@ -58,6 +58,11 @@ class EmailAppender extends Appender {
       level = Level.fromString(config['level']);
     } else {
       level = Level.INFO;
+    }
+    if (config.containsKey('dateFormat')) {
+      dateFormat = config['dateFormat'];
+    } else {
+      dateFormat = Appender.defaultDateFormat;
     }
     if (config.containsKey('host')) {
       host = config['host'];
@@ -113,5 +118,15 @@ class EmailAppender extends Appender {
           port: port, username: user, password: password, ssl: ssl);
       _connection = PersistentConnection(_smtpServer);
     }
+  }
+
+  @override
+  Appender getInstance() {
+    return EmailAppender();
+  }
+
+  @override
+  String getType() {
+    return 'EMAIL';
   }
 }

@@ -24,6 +24,7 @@ void main() {
     var now = DateTime.now();
     var yesterDayAsString = DateFormat('yyyy-MM-dd').format(yesterDay);
     var nowAsString = DateFormat('yyyy-MM-dd').format(now);
+    Logger().registerAllAppender([FileAppender()]);
     await Logger().init(config, date: yesterDay);
     if (FileSystemEntity.typeSync('unittest_$yesterDayAsString.txt') ==
         FileSystemEntityType.notFound) {
@@ -68,6 +69,7 @@ void main() {
         DateUtils.getCalendarWeek(lastWeek).toString();
     var nowAsString =
         now.year.toString() + '-CW' + DateUtils.getCalendarWeek(now).toString();
+    Logger().registerAllAppender([FileAppender()]);
     await Logger().init(config, date: lastWeek);
     if (FileSystemEntity.typeSync('unittest_$lastWeekAsString.txt') ==
         FileSystemEntityType.notFound) {
@@ -111,6 +113,7 @@ void main() {
         now.year, now.month - 1, now.day, now.hour, now.minute, now.second);
     var lastMonthAsString = DateFormat('yyyy-MM').format(lastMonth);
     var nowAsString = DateFormat('yyyy-MM').format(now);
+    Logger().registerAllAppender([FileAppender()]);
     await Logger().init(config, date: lastMonth);
     if (FileSystemEntity.typeSync('unittest_$lastMonthAsString.txt') ==
         FileSystemEntityType.notFound) {
@@ -154,6 +157,7 @@ void main() {
         now.year - 1, now.month, now.day, now.hour, now.minute, now.second);
     var lastYearAsString = DateFormat('yyyy').format(lastYear);
     var nowAsString = DateFormat('yyyy').format(now);
+    Logger().registerAllAppender([FileAppender()]);
     await Logger().init(config, date: lastYear);
     if (FileSystemEntity.typeSync('unittest_$lastYearAsString.txt') ==
         FileSystemEntityType.notFound) {

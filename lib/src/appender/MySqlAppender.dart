@@ -87,4 +87,14 @@ class MySqlAppender extends Appender {
       _connection = await MySqlConnection.connect(_connectionSettings);
     }
   }
+
+  @override
+  Appender getInstance() {
+    return MySqlAppender();
+  }
+
+  @override
+  String getType() {
+    return 'MYSQL';
+  }
 }

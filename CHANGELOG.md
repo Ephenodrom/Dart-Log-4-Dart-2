@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0 - 2020-01-07
+
+- Add unique identifier to log format (#3)
+- Add custom dateformat for appender (#2)
+- Simplify use of custom appenders. (#5)
+
 ## 0.2.1 - 2020-01-03
 
 - Improve documentation

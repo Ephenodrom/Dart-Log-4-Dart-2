@@ -16,7 +16,7 @@ class HttpAppender extends Appender {
 
   @override
   void append(LogRecord logRecord) {
-    var body = LogRecordFormatter.formatJson(logRecord);
+    var body = LogRecordFormatter.formatJson(logRecord, dateFormat: dateFormat);
     HttpUtils.postForFullResponse(url, body, headers: headers);
   }
 
@@ -34,6 +34,11 @@ class HttpAppender extends Appender {
     } else {
       level = Level.INFO;
     }
+    if (config.containsKey('dateFormat')) {
+      dateFormat = config['dateFormat'];
+    } else {
+      dateFormat = Appender.defaultDateFormat;
+    }
     if (config.containsKey('url')) {
       url = config['url'];
     } else {
@@ -47,5 +52,15 @@ class HttpAppender extends Appender {
         headers.putIfAbsent(splitted.elementAt(0), () => splitted.elementAt(1));
       }
     }
+  }
+
+  @override
+  Appender getInstance() {
+    return HttpAppender();
+  }
+
+  @override
+  String getType() {
+    return 'HTTP';
   }
 }

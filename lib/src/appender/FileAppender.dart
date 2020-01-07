@@ -85,7 +85,9 @@ class FileAppender extends Appender {
         await checkForFileChange();
         break;
     }
-    _file.writeAsStringSync(LogRecordFormatter.format(logRecord, format) + '\n',
+    _file.writeAsStringSync(
+        LogRecordFormatter.format(logRecord, format, dateFormat: dateFormat) +
+            '\n',
         mode: FileMode.append);
     if (logRecord.stackTrace != null) {
       _file.writeAsStringSync(logRecord.stackTrace.toString() + '\n',
@@ -101,6 +103,11 @@ class FileAppender extends Appender {
       format = config['format'];
     } else {
       format = Appender.defaultFormat;
+    }
+    if (config.containsKey('dateFormat')) {
+      dateFormat = config['dateFormat'];
+    } else {
+      dateFormat = Appender.defaultDateFormat;
     }
     if (config.containsKey('filePattern')) {
       filePattern = config['filePattern'];
@@ -172,5 +179,15 @@ class FileAppender extends Appender {
       created = now;
       _file = await File(_getFullFilename()).create();
     }
+  }
+
+  @override
+  Appender getInstance() {
+    return FileAppender();
+  }
+
+  @override
+  String getType() {
+    return 'FILE';
   }
 }
