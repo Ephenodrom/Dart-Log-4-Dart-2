@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.2 - 2020-01-10
+
+- Improve type safety
+
 ## 0.3.1 - 2020-01-07
 
 - Improve initialization of the logger

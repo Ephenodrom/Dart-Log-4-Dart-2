@@ -70,7 +70,7 @@ class Logger {
   ///
   /// Iterate over each configured appender and append the logRecord.
   ///
-  void log(Level logLevel, String tag, message,
+  void log(Level logLevel, String tag, String message,
       [Object error, StackTrace stackTrace, Object object]) {
     var record = LogRecord(logLevel, message, tag,
         error: error,
@@ -87,42 +87,42 @@ class Logger {
   ///
   /// Log message at level [Level.DEBUG].
   ///
-  void debug(String tag, message,
+  void debug(String tag, String message,
           [Object error, StackTrace stackTrace, Object object]) =>
       log(Level.DEBUG, tag, message, error, stackTrace, object);
 
   ///
   /// Log message at level [Level.TRACE].
   ///
-  void trace(String tag, message,
+  void trace(String tag, String message,
           [Object error, StackTrace stackTrace, Object object]) =>
       log(Level.TRACE, tag, message, error, stackTrace, object);
 
   ///
   /// Log message at level [Level.INFO].
   ///
-  void info(String tag, message,
+  void info(String tag, String message,
           [Object error, StackTrace stackTrace, Object object]) =>
       log(Level.INFO, tag, message, error, stackTrace, object);
 
   ///
   /// Log message at level [Level.WARNING].
   ///
-  void warning(String tag, message,
+  void warning(String tag, String message,
           [Object error, StackTrace stackTrace, Object object]) =>
       log(Level.WARNING, tag, message, error, stackTrace, object);
 
   ///
   /// Log message at level [Level.ERROR].
   ///
-  void error(String tag, message,
+  void error(String tag, String message,
           [Object error, StackTrace stackTrace, Object object]) =>
       log(Level.ERROR, tag, message, error, stackTrace, object);
 
   ///
   /// Log message at level [Level.FATAL].
   ///
-  void fatal(String tag, message,
+  void fatal(String tag, String message,
           [Object error, StackTrace stackTrace, Object object]) =>
       log(Level.FATAL, tag, message, error, stackTrace, object);
 
