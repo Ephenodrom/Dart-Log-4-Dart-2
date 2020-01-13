@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.3 - 2020-01-13
+
+- Update dependencies
+
 ## 0.3.2 - 2020-01-10
 
 - Improve type safety

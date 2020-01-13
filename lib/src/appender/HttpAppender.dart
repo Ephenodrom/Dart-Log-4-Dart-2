@@ -17,7 +17,7 @@ class HttpAppender extends Appender {
   @override
   void append(LogRecord logRecord) {
     var body = LogRecordFormatter.formatJson(logRecord, dateFormat: dateFormat);
-    HttpUtils.postForFullResponse(url, body, headers: headers);
+    HttpUtils.postForFullResponse(url, body: body, headers: headers);
   }
 
   @override
