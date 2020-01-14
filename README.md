@@ -90,7 +90,7 @@ The [ConsoleAppender](/lib/src/appender/ConsoleAppender.dart) is a simple append
 * type = The type of the appender. This has to be set to **CONSOLE**.
 * dateFormat = The date format used for the appender. Default = yyyy-MM-dd HH:mm:ss.
 * level = The loglevel for this appender.
-* format = The format for the log output. See [Log format](#log-format) for more information
+* format = The format for the log output. See [Log format](#log-format) for more information.
 
 ### FileAppender
 
@@ -134,6 +134,8 @@ The [EmailAppender](/lib/src/appender/EmailAppender.dart) sends a log entry via 
 * toCC = A list of email addresses to receive a copy.
 * toBCC = A list of email addresses to receive a blind copy.
 * ssl = Whether to use ssl or not.
+* templateFile = Full path to a file containing the template to use to send via email. If no template is given the appender will send the LogRecord as JSON. You can use the same placeholders within your template that are used for the format setting. See [Log format](#log-format) for more information.
+* html = Where the given template is plaintext or html. Default is false.
 
 **Note**: Due to the [mailer package](https://pub.dev/packages/mailer) that is used to provide this appender, this works only for mail servers that need authorization by user/password.
 
@@ -202,16 +204,26 @@ Logger().registerAppender(CustomAppender());
 
 The format of the log entrys can be configured for some appender.
 
-* %d = The date
-* %i = The identifier
-* %t = The tag
-* %l = The log level
-* %m = The message
+* %d = The date.
+* %i = The identifier.
+* %t = The tag.
+* %l = The log level.
+* %m = The message.
 
 Examples :
 
 * "%d %i %t %l %m"
 * "This log entry was created on %d from class %t from thread %i. It has the level %l and the message %m"
+
+Example for an html template :
+
+```html
+<h1>Log Event</h1>
+<p>Message: %m</p>
+<p>Class: %t</p>
+<p>Time: %d</p>
+<p>Level: %l</p>
+```
 
 ### Rotation Cycle
 
@@ -268,7 +280,9 @@ var config = {
         'test1@example.com',
         'test2@example.com'
       ],
-      'ssl': true
+      'ssl': true,
+      'templateFile': '/path/to/template.txt',
+      'html': false
     },
     {
       'type': 'HTTP',
@@ -334,7 +348,9 @@ var config = {
         "test1@example.com",
         "test2@example.com"
       ],
-      "ssl": true
+      "ssl": true,
+      "templateFile": "/path/to/template.txt",
+      "html": false
     },
     {
       "type": "HTTP",
