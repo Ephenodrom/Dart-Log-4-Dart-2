@@ -53,4 +53,19 @@ class LogRecordFormatter {
 
     return json.encode(map);
   }
+
+  ///
+  /// Maps the given [logRecord] to the given [template].
+  ///
+  /// If [template] is null, it will return the logRecord as JSON.
+  ///
+  /// The [dateFormat] defines the format for the [LogRecord.time]
+  ///
+  static String formatEmail(String template, LogRecord logRecord,
+      {String dateFormat = 'yyyy-MM-dd HH:mm:ss'}) {
+    if (template == null) {
+      return formatJson(logRecord, dateFormat: dateFormat);
+    }
+    return format(logRecord, template);
+  }
 }

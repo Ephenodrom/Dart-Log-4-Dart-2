@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:basic_utils/basic_utils.dart';
 import 'package:log_4_dart_2/log_4_dart_2.dart';
 import 'package:log_4_dart_2/src/LogRecord.dart';
@@ -22,14 +24,25 @@ class EmailAppender extends Appender {
   bool ssl = false;
   SmtpServer _smtpServer;
   PersistentConnection _connection;
+  String templateFile;
+  String template;
+  bool html = false;
 
   @override
   void append(LogRecord logRecord) async {
     final message = Message()
       ..from = Address(fromMail, fromName)
       ..recipients.addAll(to)
-      ..subject = 'Logger ${logRecord.level} at ${logRecord.getFormattedTime()}'
-      ..text = LogRecordFormatter.formatJson(logRecord, dateFormat: dateFormat);
+      ..subject =
+          'Logger ${logRecord.level} at ${logRecord.getFormattedTime()}';
+    if (html) {
+      message.html = LogRecordFormatter.formatEmail(template, logRecord,
+          dateFormat: dateFormat);
+    } else {
+      message.text = LogRecordFormatter.formatEmail(template, logRecord,
+          dateFormat: dateFormat);
+    }
+
     if (IterableUtils.isNotNullOrEmpty(toCC)) {
       message.ccRecipients.addAll(toCC);
     }
@@ -113,10 +126,18 @@ class EmailAppender extends Appender {
     if (config.containsKey('ssl')) {
       ssl = config['ssl'];
     }
+    if (config.containsKey('html')) {
+      html = config['html'];
+    }
     if (!test) {
       _smtpServer = SmtpServer(host,
           port: port, username: user, password: password, ssl: ssl);
       _connection = PersistentConnection(_smtpServer);
+    }
+    if (config.containsKey('templateFile')) {
+      templateFile = config['templateFile'];
+      var file = File(templateFile);
+      template = file.readAsStringSync();
     }
   }
 

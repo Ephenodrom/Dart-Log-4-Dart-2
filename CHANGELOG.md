@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.0 - 2020-01-14
+
+- Add template feature to EmailAppender (#4)
+- Add unit tests
+
 ## 0.3.3 - 2020-01-13
 
 - Update dependencies
