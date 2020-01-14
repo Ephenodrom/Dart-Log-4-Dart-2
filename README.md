@@ -135,7 +135,7 @@ The [EmailAppender](/lib/src/appender/EmailAppender.dart) sends a log entry via 
 * toBCC = A list of email addresses to receive a blind copy.
 * ssl = Whether to use ssl or not.
 * templateFile = Full path to a file containing the template to use to send via email. If no template is given the appender will send the LogRecord as JSON. You can use the same placeholders within your template that are used for the format setting. See [Log format](#log-format) for more information.
-* html = Where the given template is plaintext or html. Default is false.
+* html = Whether the given template is plaintext or html. Default is false.
 
 **Note**: Due to the [mailer package](https://pub.dev/packages/mailer) that is used to provide this appender, this works only for mail servers that need authorization by user/password.
 
