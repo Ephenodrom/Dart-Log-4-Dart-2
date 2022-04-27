@@ -13,7 +13,7 @@ class LogRecordFormatter {
   /// The [dateFormat] defines the format for the [LogRecord.time]
   ///
   static String format(LogRecord logRecord, String format,
-      {String dateFormat = 'yyyy-MM-dd HH:mm:ss'}) {
+      {String? dateFormat = 'yyyy-MM-dd HH:mm:ss'}) {
     if (format.contains('\%d')) {
       var date = DateFormat(dateFormat).format(logRecord.time);
       format = format.replaceAll('\%d', date);
@@ -25,7 +25,7 @@ class LogRecordFormatter {
       if (StringUtils.isNullOrEmpty(logRecord.identifier)) {
         format = format.replaceAll('\%i', '');
       } else {
-        format = format.replaceAll('\%i', logRecord.identifier);
+        format = format.replaceAll('\%i', logRecord.identifier!);
       }
     }
     if (format.contains('\%l')) {
@@ -43,7 +43,7 @@ class LogRecordFormatter {
   /// The [dateFormat] defines the format for the [LogRecord.time]
   ///
   static String formatJson(LogRecord logRecord,
-      {String dateFormat = 'yyyy-MM-dd HH:mm:ss'}) {
+      {String? dateFormat = 'yyyy-MM-dd HH:mm:ss'}) {
     var map = {
       'time': DateFormat(dateFormat).format(logRecord.time),
       'message': logRecord.message,
@@ -61,8 +61,8 @@ class LogRecordFormatter {
   ///
   /// The [dateFormat] defines the format for the [LogRecord.time]
   ///
-  static String formatEmail(String template, LogRecord logRecord,
-      {String dateFormat = 'yyyy-MM-dd HH:mm:ss'}) {
+  static String formatEmail(String? template, LogRecord logRecord,
+      {String? dateFormat = 'yyyy-MM-dd HH:mm:ss'}) {
     if (template == null) {
       return formatJson(logRecord, dateFormat: dateFormat);
     }

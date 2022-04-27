@@ -9,15 +9,15 @@ import 'package:log_4_dart_2/src/appender/Appender.dart';
 ///
 class HttpAppender extends Appender {
   /// The destination for the http post request
-  String url;
+  String? url;
 
   /// The headers to send with the request
-  Map<String, String> headers;
+  Map<String, String>? headers;
 
   @override
   void append(LogRecord logRecord) {
     var body = LogRecordFormatter.formatJson(logRecord, dateFormat: dateFormat);
-    HttpUtils.postForFullResponse(url, body: body, headers: headers);
+    HttpUtils.postForFullResponse(url!, body: body, headers: headers);
   }
 
   @override
@@ -26,7 +26,7 @@ class HttpAppender extends Appender {
   }
 
   @override
-  void init(Map<String, dynamic> config, bool test, DateTime date) {
+  Future<void>? init(Map<String, dynamic> config, bool test, DateTime? date) {
     created = date ?? DateTime.now();
     type = AppenderType.HTTP;
     if (config.containsKey('level')) {
@@ -49,9 +49,10 @@ class HttpAppender extends Appender {
       List<String> h = config['headers'];
       for (var s in h) {
         var splitted = s.split(':');
-        headers.putIfAbsent(splitted.elementAt(0), () => splitted.elementAt(1));
+        headers!.putIfAbsent(splitted.elementAt(0), () => splitted.elementAt(1));
       }
     }
+    return null;
   }
 
   @override

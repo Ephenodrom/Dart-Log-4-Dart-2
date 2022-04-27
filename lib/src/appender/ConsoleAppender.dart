@@ -9,7 +9,7 @@ import 'package:log_4_dart_2/src/appender/Appender.dart';
 class ConsoleAppender extends Appender {
   @override
   void append(LogRecord logRecord) {
-    print(LogRecordFormatter.format(logRecord, format, dateFormat: dateFormat));
+    print(LogRecordFormatter.format(logRecord, format!, dateFormat: dateFormat));
     if (logRecord.stackTrace != null) {
       print(logRecord.stackTrace.toString());
     }
@@ -21,7 +21,7 @@ class ConsoleAppender extends Appender {
   }
 
   @override
-  void init(Map<String, dynamic> config, bool test, DateTime date) {
+  Future<void>? init(Map<String, dynamic> config, bool test, DateTime? date) {
     created = date ?? DateTime.now();
     type = AppenderType.CONSOLE;
     if (config.containsKey('format')) {
@@ -39,6 +39,7 @@ class ConsoleAppender extends Appender {
     } else {
       level = Level.INFO;
     }
+    return null;
   }
 
   @override

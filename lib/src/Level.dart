@@ -77,9 +77,9 @@ class Level implements Comparable<Level> {
   ///
   /// Returns null if no log level was found.
   ///
-  static Level fromString(String s) {
+  static Level? fromString(String? s) {
     for (var l in LEVELS) {
-      if (l.name.toLowerCase() == s.toLowerCase()) {
+      if (l.name.toLowerCase() == s!.toLowerCase()) {
         return l;
       }
     }

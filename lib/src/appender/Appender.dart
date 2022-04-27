@@ -6,16 +6,16 @@ import 'package:log_4_dart_2/src/appender/AppenderType.dart';
 ///
 abstract class Appender {
   /// The date the appender was created.
-  DateTime created;
+  late DateTime created;
 
   /// The loglevel for the appender.
-  Level level;
+  Level? level;
 
   /// The logformat for the appender.
-  String format;
+  String? format;
 
   /// The type of the appender.
-  AppenderType type;
+  AppenderType? type;
 
   /// The default logging format.
   static String defaultFormat = '%d %t %l %m';
@@ -24,7 +24,7 @@ abstract class Appender {
   static String defaultDateFormat = 'yyyy-MM-dd HH:mm:ss';
 
   /// The dateformat used for the appender.
-  String dateFormat;
+  String? dateFormat;
 
   ///
   /// Appending the given [logRecord].
@@ -34,7 +34,7 @@ abstract class Appender {
   ///
   /// Setup the appender. This needs to be called for every appender to configure the appender with the necessary data.
   ///
-  void init(Map<String, dynamic> config, bool test, DateTime date);
+  Future<void>? init(Map<String, dynamic> config, bool test, DateTime? date);
 
   ///
   /// Retuns a new instance of the appender.

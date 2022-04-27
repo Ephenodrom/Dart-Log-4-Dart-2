@@ -17,7 +17,7 @@ class Logger {
   List<Appender> registeredAppenders = [];
 
   /// An identifier that is passed to each log record. It can be used to connect log entries to a certain event in an application.
-  String identifier;
+  String? identifier;
 
   static final Logger _singleton = Logger._internal();
 
@@ -41,16 +41,9 @@ class Logger {
   ///
   /// Initialise the logger from the given [config].
   ///
-  void init(Map<String, dynamic> config,
-      {bool test = false, DateTime date}) async {
+  Future<void> init(Map<String, dynamic> config, {bool test = false, DateTime? date}) async {
     if (registeredAppenders.isEmpty) {
-      registerAllAppender([
-        ConsoleAppender(),
-        FileAppender(),
-        HttpAppender(),
-        EmailAppender(),
-        MySqlAppender()
-      ]);
+      registerAllAppender([ConsoleAppender(), FileAppender(), HttpAppender(), EmailAppender(), MySqlAppender()]);
     }
     reset();
     for (Map<String, dynamic> app in config['appenders']) {
@@ -70,15 +63,10 @@ class Logger {
   ///
   /// Iterate over each configured appender and append the logRecord.
   ///
-  void log(Level logLevel, String tag, String message,
-      [Object error, StackTrace stackTrace, Object object]) {
-    var record = LogRecord(logLevel, message, tag,
-        error: error,
-        stackTrace: stackTrace,
-        object: object,
-        identifier: identifier);
+  void log(Level logLevel, String tag, String message, [Object? error, StackTrace? stackTrace, Object? object]) {
+    var record = LogRecord(logLevel, message, tag, error: error, stackTrace: stackTrace, object: object, identifier: identifier);
     for (var app in appenders) {
-      if (logLevel >= app.level) {
+      if (logLevel >= app.level!) {
         app.append(record);
       }
     }
@@ -87,44 +75,33 @@ class Logger {
   ///
   /// Log message at level [Level.DEBUG].
   ///
-  void debug(String tag, String message,
-          [Object error, StackTrace stackTrace, Object object]) =>
-      log(Level.DEBUG, tag, message, error, stackTrace, object);
+  void debug(String tag, String message, [Object? error, StackTrace? stackTrace, Object? object]) => log(Level.DEBUG, tag, message, error, stackTrace, object);
 
   ///
   /// Log message at level [Level.TRACE].
   ///
-  void trace(String tag, String message,
-          [Object error, StackTrace stackTrace, Object object]) =>
-      log(Level.TRACE, tag, message, error, stackTrace, object);
+  void trace(String tag, String message, [Object? error, StackTrace? stackTrace, Object? object]) => log(Level.TRACE, tag, message, error, stackTrace, object);
 
   ///
   /// Log message at level [Level.INFO].
   ///
-  void info(String tag, String message,
-          [Object error, StackTrace stackTrace, Object object]) =>
-      log(Level.INFO, tag, message, error, stackTrace, object);
+  void info(String tag, String message, [Object? error, StackTrace? stackTrace, Object? object]) => log(Level.INFO, tag, message, error, stackTrace, object);
 
   ///
   /// Log message at level [Level.WARNING].
   ///
-  void warning(String tag, String message,
-          [Object error, StackTrace stackTrace, Object object]) =>
+  void warning(String tag, String message, [Object? error, StackTrace? stackTrace, Object? object]) =>
       log(Level.WARNING, tag, message, error, stackTrace, object);
 
   ///
   /// Log message at level [Level.ERROR].
   ///
-  void error(String tag, String message,
-          [Object error, StackTrace stackTrace, Object object]) =>
-      log(Level.ERROR, tag, message, error, stackTrace, object);
+  void error(String tag, String message, [Object? error, StackTrace? stackTrace, Object? object]) => log(Level.ERROR, tag, message, error, stackTrace, object);
 
   ///
   /// Log message at level [Level.FATAL].
   ///
-  void fatal(String tag, String message,
-          [Object error, StackTrace stackTrace, Object object]) =>
-      log(Level.FATAL, tag, message, error, stackTrace, object);
+  void fatal(String tag, String message, [Object? error, StackTrace? stackTrace, Object? object]) => log(Level.FATAL, tag, message, error, stackTrace, object);
 
   ///
   /// Adds a custom appender to the list of appenders.

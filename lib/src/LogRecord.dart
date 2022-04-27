@@ -10,7 +10,7 @@ class LogRecord {
   final String message;
 
   /// Non-string message passed to Logger.
-  final Object object;
+  final Object? object;
 
   /// Logger where this record is stored.
   final String loggerName;
@@ -19,16 +19,16 @@ class LogRecord {
   DateTime time;
 
   /// Associated error (if any) when recording errors messages.
-  final Object error;
+  final Object? error;
 
   /// Associated stackTrace (if any) when recording errors messages.
-  final StackTrace stackTrace;
+  final StackTrace? stackTrace;
 
   /// A unique identifier, that can be used to connect log entries to a certain event in an application.
-  final String identifier;
+  final String? identifier;
 
   /// The dateformat for the time the record was created.
-  final String dateFormat;
+  final String? dateFormat;
 
   LogRecord(this.level, this.message, this.loggerName,
       {this.error,
