@@ -30,6 +30,7 @@ class EmailAppender extends Appender {
 
   @override
   void append(LogRecord logRecord) async {
+    logRecord.loggerName ??= getType();
     final message = Message()
       ..from = Address(fromMail!, fromName)
       ..recipients.addAll(to)
@@ -145,6 +146,6 @@ class EmailAppender extends Appender {
 
   @override
   String getType() {
-    return 'EMAIL';
+    return AppenderType.EMAIL.name;
   }
 }

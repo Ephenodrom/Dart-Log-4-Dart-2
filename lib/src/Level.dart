@@ -30,7 +30,7 @@ class Level implements Comparable<Level> {
   static const Level INFO = Level('INFO', 300);
 
   /// Key for potential problems ([value] = 400).
-  static const Level WARNING = Level('WARNING', 400);
+  static const Level WARNING = Level('WARN', 400);
 
   /// Key for serious failures ([value] = 500).
   static const Level ERROR = Level('ERROR', 500);
@@ -41,16 +41,7 @@ class Level implements Comparable<Level> {
   /// Special key to turn off all logging ([value] = 700).
   static const Level OFF = Level('OFF', 700);
 
-  static const List<Level> LEVELS = [
-    ALL,
-    TRACE,
-    DEBUG,
-    INFO,
-    WARNING,
-    ERROR,
-    FATAL,
-    OFF
-  ];
+  static const List<Level> LEVELS = [ALL, TRACE, DEBUG, INFO, WARNING, ERROR, FATAL, OFF];
 
   @override
   bool operator ==(Object other) => other is Level && value == other.value;

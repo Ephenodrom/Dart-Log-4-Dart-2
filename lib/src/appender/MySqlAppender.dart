@@ -30,8 +30,9 @@ class MySqlAppender extends Appender {
 
   @override
   void append(LogRecord logRecord) async {
-    await _connection.query('insert into $table (tag, level, message, time) values (?, ?, ?, ?)',
-        [logRecord.loggerName, logRecord.level.name, logRecord.message, logRecord.time.toUtc()]);
+    logRecord.loggerName ??= getType();
+    await _connection.query(
+        'insert into $table (tag, level, message, time) values (?, ?, ?, ?)', [logRecord.tag, logRecord.level.name, logRecord.message, logRecord.time.toUtc()]);
   }
 
   @override
@@ -90,6 +91,6 @@ class MySqlAppender extends Appender {
 
   @override
   String getType() {
-    return 'MYSQL';
+    return AppenderType.MYSQL.name;
   }
 }

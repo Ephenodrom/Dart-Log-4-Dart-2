@@ -63,6 +63,7 @@ class FileAppender extends Appender {
         await checkForFileChange();
         break;
     }
+    logRecord.loggerName ??= getType();
     _file.writeAsStringSync(LogRecordFormatter.format(logRecord, format!, dateFormat: dateFormat) + '\n', mode: FileMode.append);
     if (logRecord.stackTrace != null) {
       _file.writeAsStringSync(logRecord.stackTrace.toString() + '\n', mode: FileMode.append);
@@ -162,6 +163,6 @@ class FileAppender extends Appender {
 
   @override
   String getType() {
-    return 'FILE';
+    return AppenderType.FILE.name;
   }
 }

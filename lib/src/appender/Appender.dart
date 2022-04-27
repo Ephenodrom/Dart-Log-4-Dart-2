@@ -11,6 +11,10 @@ abstract class Appender {
   /// The loglevel for the appender.
   Level? level;
 
+  int? clientDepthOffset;
+
+  String? lineInfo;
+
   /// The logformat for the appender.
   String? format;
 
@@ -18,13 +22,15 @@ abstract class Appender {
   AppenderType? type;
 
   /// The default logging format.
-  static String defaultFormat = '%d %t %l %m';
+  static String defaultFormat = '%d %t %l %m %f';
 
   /// The default date format.
   static String defaultDateFormat = 'yyyy-MM-dd HH:mm:ss';
 
   /// The dateformat used for the appender.
   String? dateFormat;
+
+  bool brackets = false;
 
   ///
   /// Appending the given [logRecord].

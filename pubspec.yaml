@@ -1,11 +1,11 @@
 name: log_4_dart_2
 description: A dart package for logging, with multiple and configurable appenders.
-version: 0.5.0
+version: 1.0.0 # Changed Logger.init, thus breaking changes
 homepage: https://github.com/Ephenodrom/Dart-Log-4-Dart-2
-author: Daniel Linsenmeier <daniel@ephenodrom.de>
+#author: Daniel Linsenmeier <daniel@ephenodrom.de> # https://stackoverflow.com/a/59942840/132396
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=2.16.0-0 <3.0.0'
 
 dependencies:
   analyzer: ^4.0.0
@@ -16,5 +16,5 @@ dependencies:
   mysql1: ^0.19.2
 
 dev_dependencies:
-  pedantic: ^1.9.0
+  flutter_lints: ^1.0.4
   test: ^1.6.0

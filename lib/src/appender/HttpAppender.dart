@@ -16,6 +16,7 @@ class HttpAppender extends Appender {
 
   @override
   void append(LogRecord logRecord) {
+    logRecord.loggerName ??= getType();
     var body = LogRecordFormatter.formatJson(logRecord, dateFormat: dateFormat);
     HttpUtils.postForFullResponse(url!, body: body, headers: headers);
   }
@@ -62,6 +63,6 @@ class HttpAppender extends Appender {
 
   @override
   String getType() {
-    return 'HTTP';
+    return AppenderType.HTTP.name;
   }
 }

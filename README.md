@@ -59,9 +59,9 @@ There are two ways to setup the [Logger](/lib/src/Logger.dart).
 ```dart
 void main(List<String> arguments){
   // Init the logger from a configuration file
-  Logger().initFromFile('/path/to/log4d.json');
+  Logger.initFromFile('/path/to/log4d.json');
   // Or by using a Map<String,dynamic>
-  Logger().init(config);
+  Logger.init(config);
 }
 ```
 
@@ -73,12 +73,12 @@ The [Logger](/lib/src/Logger.dart) offers multiple methods for logging on differ
 
 ```dart
 static String TAG = 'TestClass';
-Logger().debug(TAG, 'Lorem Ipsum');
-Logger().trace(TAG, 'Lorem Ipsum');
-Logger().info(TAG, 'Lorem Ipsum');
-Logger().warning(TAG, 'Lorem Ipsum');
-Logger().error(TAG, 'Lorem Ipsum');
-Logger().fatal(TAG, 'Lorem Ipsum');
+Logger.instance.debug(TAG, 'Lorem Ipsum');
+Logger.instance.trace(TAG, 'Lorem Ipsum');
+Logger.instance.info(TAG, 'Lorem Ipsum');
+Logger.instance.warning(TAG, 'Lorem Ipsum');
+Logger.instance.error(TAG, 'Lorem Ipsum');
+Logger.instance.fatal(TAG, 'Lorem Ipsum');
 ```
 
 ## Appender And Configuration
@@ -197,7 +197,7 @@ class CustomAppender extends Appender {
 Register the custom appender in the Logger via the **registerAppender()** method before the logger is initialized.
 
 ```dart
-Logger().registerAppender(CustomAppender());
+Logger.instance.registerAppender(CustomAppender());
 ```
 
 ### Log Format

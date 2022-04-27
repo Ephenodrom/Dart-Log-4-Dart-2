@@ -42,17 +42,18 @@ void main() {
         }
       ],
     };
-    Logger().registerAllAppender([ConsoleAppender(), FileAppender(), HttpAppender(), EmailAppender(), MySqlAppender()]);
-    await Logger().init(config, test: true);
+    await Logger.init(null);
+    Logger.instance.registerAllAppender([ConsoleAppender(), FileAppender(), HttpAppender(), EmailAppender(), MySqlAppender()]);
+    await Logger.init(config, test: true);
 
-    expect(Logger().appenders.length, 5);
+    expect(Logger.instance.appenders.length, 5);
 
-    var console = Logger().appenders.elementAt(0) as ConsoleAppender;
+    var console = Logger.instance.appenders.elementAt(0) as ConsoleAppender;
     expect(console.type, AppenderType.CONSOLE);
     expect(console.format, '%d %t %l %m');
     expect(console.level, Level.INFO);
 
-    var file = Logger().appenders.elementAt(1) as FileAppender;
+    var file = Logger.instance.appenders.elementAt(1) as FileAppender;
 
     expect(file.type, AppenderType.FILE);
     expect(file.format, '%d %t %l %m');
@@ -61,7 +62,7 @@ void main() {
     expect(file.rotationCycle, RotationCycle.NEVER);
     expect(file.path, '/path/to/');
 
-    var email = Logger().appenders.elementAt(2) as EmailAppender;
+    var email = Logger.instance.appenders.elementAt(2) as EmailAppender;
 
     expect(email.type, AppenderType.EMAIL);
     expect(email.level, Level.INFO);
@@ -75,7 +76,7 @@ void main() {
     expect(email.toCC!.length, 2);
     expect(email.toBCC!.length, 2);
 
-    var http = Logger().appenders.elementAt(3) as HttpAppender;
+    var http = Logger.instance.appenders.elementAt(3) as HttpAppender;
 
     expect(http.type, AppenderType.HTTP);
     expect(http.level, Level.INFO);
@@ -83,7 +84,7 @@ void main() {
     expect(http.headers!.length, 1);
     expect(http.headers!['Content-Type'], 'application/json');
 
-    var mysql = Logger().appenders.elementAt(4) as MySqlAppender;
+    var mysql = Logger.instance.appenders.elementAt(4) as MySqlAppender;
 
     expect(mysql.type, AppenderType.MYSQL);
     expect(mysql.level, Level.INFO);
