@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:isolate';
 
@@ -64,10 +65,21 @@ class LogRecordFormatter {
       }
     }
 
-    var threadName = Isolate.current.debugName;
-    if (threadName != null) {
-      format = format + ' thread: ' + threadName;
+    // MDC: https://logging.apache.org/log4j/2.x/manual/thread-context.html
+    if (format.contains('\%X')) {
+      format.split('%X').forEach((element) {
+        if (element.startsWith('{')) {
+          var mdcKey = element.substring(1, element.indexOf('}'));
+          List<dynamic> values = Zone.current[mdcKey];
+          if (values.isNotEmpty) {
+            format = format.replaceAll('%X{$mdcKey}', open + values[0].toString() + close);
+          } else {
+            format = format.replaceAll('%X{$mdcKey}', open + close);
+          }
+        }
+      });
     }
+
     format = format.replaceAll('  ', ' ');
     return format;
   }
