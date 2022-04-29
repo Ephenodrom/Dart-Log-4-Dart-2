@@ -12,42 +12,40 @@ import 'package:mailer/smtp_server.dart';
 /// A appender for sending log entries via email
 ///
 class EmailAppender extends Appender {
-  String host;
-  String user;
-  String password;
-  int port;
-  String fromMail;
-  String fromName;
-  List<Address> to;
-  List<Address> toCC;
-  List<Address> toBCC;
-  bool ssl = false;
-  SmtpServer _smtpServer;
-  PersistentConnection _connection;
-  String templateFile;
-  String template;
-  bool html = false;
+  String? host;
+  String? user;
+  String? password;
+  int? port;
+  String? fromMail;
+  String? fromName;
+  late List<Address> to;
+  List<Address>? toCC;
+  List<Address>? toBCC;
+  bool? ssl = false;
+  late SmtpServer _smtpServer;
+  late PersistentConnection _connection;
+  String? templateFile;
+  String? template;
+  bool? html = false;
 
   @override
   void append(LogRecord logRecord) async {
+    logRecord.loggerName ??= getType();
     final message = Message()
-      ..from = Address(fromMail, fromName)
+      ..from = Address(fromMail!, fromName)
       ..recipients.addAll(to)
-      ..subject =
-          'Logger ${logRecord.level} at ${logRecord.getFormattedTime()}';
-    if (html) {
-      message.html = LogRecordFormatter.formatEmail(template, logRecord,
-          dateFormat: dateFormat);
+      ..subject = 'Logger ${logRecord.level} at ${logRecord.getFormattedTime()}';
+    if (html!) {
+      message.html = LogRecordFormatter.formatEmail(template, logRecord, dateFormat: dateFormat);
     } else {
-      message.text = LogRecordFormatter.formatEmail(template, logRecord,
-          dateFormat: dateFormat);
+      message.text = LogRecordFormatter.formatEmail(template, logRecord, dateFormat: dateFormat);
     }
 
     if (IterableUtils.isNotNullOrEmpty(toCC)) {
-      message.ccRecipients.addAll(toCC);
+      message.ccRecipients.addAll(toCC!);
     }
     if (IterableUtils.isNotNullOrEmpty(toBCC)) {
-      message.bccRecipients.addAll(toBCC);
+      message.bccRecipients.addAll(toBCC!);
     }
 
     try {
@@ -64,7 +62,7 @@ class EmailAppender extends Appender {
   }
 
   @override
-  void init(Map<String, dynamic> config, bool test, DateTime date) {
+  Future<void>? init(Map<String, dynamic> config, bool test, DateTime? date) {
     created = date ?? DateTime.now();
     type = AppenderType.EMAIL;
     if (config.containsKey('level')) {
@@ -114,13 +112,13 @@ class EmailAppender extends Appender {
     if (config.containsKey('toCC')) {
       toCC = [];
       for (String s in config['toCC']) {
-        toCC.add(Address(s));
+        toCC!.add(Address(s));
       }
     }
     if (config.containsKey('toBCC')) {
       toBCC = [];
       for (String s in config['toBCC']) {
-        toBCC.add(Address(s));
+        toBCC!.add(Address(s));
       }
     }
     if (config.containsKey('ssl')) {
@@ -130,15 +128,15 @@ class EmailAppender extends Appender {
       html = config['html'];
     }
     if (!test) {
-      _smtpServer = SmtpServer(host,
-          port: port, username: user, password: password, ssl: ssl);
+      _smtpServer = SmtpServer(host!, port: port!, username: user, password: password, ssl: ssl!);
       _connection = PersistentConnection(_smtpServer);
     }
     if (config.containsKey('templateFile')) {
       templateFile = config['templateFile'];
-      var file = File(templateFile);
+      var file = File(templateFile!);
       template = file.readAsStringSync();
     }
+    return null;
   }
 
   @override
@@ -148,6 +146,6 @@ class EmailAppender extends Appender {
 
   @override
   String getType() {
-    return 'EMAIL';
+    return AppenderType.EMAIL.name;
   }
 }

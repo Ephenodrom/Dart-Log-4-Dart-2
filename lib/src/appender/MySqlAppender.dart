@@ -8,35 +8,31 @@ import 'package:mysql1/mysql1.dart';
 ///
 class MySqlAppender extends Appender {
   /// The host for the mysql database
-  String host;
+  String? host;
 
   /// The user for the database
-  String user;
+  String? user;
 
   /// The password of the user for the database
-  String password;
+  String? password;
 
   /// The port of the database
-  int port;
+  int? port;
 
   /// The database name on the host
-  String database;
+  String? database;
 
   /// The table name to log to
-  String table;
+  String? table;
 
-  MySqlConnection _connection;
-  ConnectionSettings _connectionSettings;
+  late MySqlConnection _connection;
+  late ConnectionSettings _connectionSettings;
 
   @override
   void append(LogRecord logRecord) async {
+    logRecord.loggerName ??= getType();
     await _connection.query(
-        'insert into $table (tag, level, message, time) values (?, ?, ?, ?)', [
-      logRecord.loggerName,
-      logRecord.level.name,
-      logRecord.message,
-      logRecord.time.toUtc()
-    ]);
+        'insert into $table (tag, level, message, time) values (?, ?, ?, ?)', [logRecord.tag, logRecord.level.name, logRecord.message, logRecord.time.toUtc()]);
   }
 
   @override
@@ -45,7 +41,7 @@ class MySqlAppender extends Appender {
   }
 
   @override
-  void init(Map<String, dynamic> config, bool test, DateTime date) async {
+  Future<void>? init(Map<String, dynamic> config, bool test, DateTime? date) async {
     created = date ?? DateTime.now();
     type = AppenderType.MYSQL;
     if (config.containsKey('level')) {
@@ -82,10 +78,10 @@ class MySqlAppender extends Appender {
       throw ArgumentError('Missing table argument for MySqlAppender');
     }
     if (!test) {
-      _connectionSettings = ConnectionSettings(
-          host: host, port: port, user: user, password: password, db: database);
+      _connectionSettings = ConnectionSettings(host: host!, port: port!, user: user, password: password, db: database);
       _connection = await MySqlConnection.connect(_connectionSettings);
     }
+    return null;
   }
 
   @override
@@ -95,6 +91,6 @@ class MySqlAppender extends Appender {
 
   @override
   String getType() {
-    return 'MYSQL';
+    return AppenderType.MYSQL.name;
   }
 }

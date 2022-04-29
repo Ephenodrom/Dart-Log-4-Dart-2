@@ -6,7 +6,7 @@ void main() {
       {'type': 'CONSOLE', 'format': '%d %t %l %m', 'level': 'INFO'},
     ]
   };
-  Logger().init(config);
+  Logger.init(config);
   ExampleClass.doSomething();
 }
 
@@ -14,6 +14,6 @@ class ExampleClass {
   static String TAG = 'ExampleClass';
 
   static void doSomething() {
-    Logger().info(TAG, 'I am doing something!');
+    Logger.instance.info(TAG, 'I am doing something!');
   }
 }
