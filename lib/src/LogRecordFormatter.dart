@@ -49,7 +49,7 @@ class LogRecordFormatter {
     }
 
     if (format.contains('\%m')) {
-      format = format.replaceAll('\%m', logRecord.message);
+      format = format.replaceAll('\%m', eval(logRecord.message));
     }
 
     if (format.contains('\%c')) {
@@ -61,7 +61,7 @@ class LogRecordFormatter {
       if (ifl != null) {
         format = format.replaceAll('\%f', open + ifl + close);
       } else {
-        format = format.replaceAll('\%f', open + ':' + close);
+        format = format.replaceAll('\%f', open + '' + close);
       }
     }
 
@@ -112,5 +112,14 @@ class LogRecordFormatter {
       return formatJson(logRecord, dateFormat: dateFormat);
     }
     return format(logRecord, template);
+  }
+
+  static String eval(Object message) {
+    if (message is Function()) {
+      return message().toString();
+    } else if (message is String) {
+      return message;
+    }
+    return message.toString();
   }
 }

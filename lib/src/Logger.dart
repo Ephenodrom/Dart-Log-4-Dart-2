@@ -12,6 +12,7 @@ import 'LoggerStackTrace.dart';
 /// The logger.
 ///
 class Logger {
+  //implements LoggingInterface {
   /// All appenders for the logger.
   List<Appender> appenders = [];
 
@@ -28,9 +29,14 @@ class Logger {
 
   static Logger? _singleton;
 
-  @Deprecated('Deprecated. Use: Logger.init(...)')
-  Logger() {
-    throw Exception('Deprecated. Use: Logger.init(...)');
+  //@Deprecated('Deprecated. Use: Logger.init(...)')
+  // Logger() {
+  //   throw Exception('Deprecated. Use: Logger.init(...)');
+  // }
+
+  factory Logger() {
+    assert(_singleton != null, 'Logger.init(...) not yet called');
+    return _singleton!;
   }
 
   Logger._(List<Appender> definedAppenders, List<Appender> activeAppenders, {int clientDepthOffset = 0}) {
@@ -86,7 +92,7 @@ class Logger {
   ///
   /// Iterate over each configured appender and append the logRecord.
   ///
-  void log(Level logLevel, String message, String? tag, [Object? error, StackTrace? stackTrace, Object? object, int depthOffset = 0]) {
+  void log(Level logLevel, Object message, String? tag, [Object? error, StackTrace? stackTrace, Object? object, int depthOffset = 0]) {
     var totalDepthOffset = clientDepthOffset + depthOffset;
     var contextInfo = LoggerStackTrace.from(StackTrace.current, depthOffset: totalDepthOffset);
     var record = LogRecord(logLevel, message, tag, contextInfo, error: error, stackTrace: stackTrace, object: object, loggerName: loggerName);
@@ -98,40 +104,100 @@ class Logger {
   }
 
   ///
-  /// Log message at level [Level.DEBUG].
-  ///
-  void debug(String? tag, String message, [Object? error, StackTrace? stackTrace, Object? object, int depthOffset = 0]) =>
-      log(Level.DEBUG, message, tag, error, stackTrace, object, depthOffset);
-
-  ///
   /// Log message at level [Level.TRACE].
   ///
-  void trace(String? tag, String message, [Object? error, StackTrace? stackTrace, Object? object, int depthOffset = 0]) =>
+  @Deprecated('Use Logger.trace(...) or mixin Log4Dart with logTrace(...)')
+  void logTrace(String? tag, Object message, [Object? error, StackTrace? stackTrace, Object? object, int depthOffset = 0]) =>
       log(Level.TRACE, message, tag, error, stackTrace, object, depthOffset);
+
+  ///
+  /// Log message at level [Level.DEBUG].
+  ///
+  @Deprecated('Use Logger.debug(...) or mixin Log4Dart with logDebug(...)')
+  void logDebug(String? tag, Object message, [Object? error, StackTrace? stackTrace, Object? object, int depthOffset = 0]) =>
+      log(Level.DEBUG, message, tag, error, stackTrace, object, depthOffset);
 
   ///
   /// Log message at level [Level.INFO].
   ///
-  void info(String tag, String message, [Object? error, StackTrace? stackTrace, Object? object, int depthOffset = 0]) =>
+  @Deprecated('Use Logger.info(...) or mixin Log4Dart with logInfo(...)')
+  void logInfo(String tag, Object message, [Object? error, StackTrace? stackTrace, Object? object, int depthOffset = 0]) =>
       log(Level.INFO, message, tag, error, stackTrace, object, depthOffset);
 
   ///
   /// Log message at level [Level.WARNING].
   ///
-  void warning(String tag, String message, [Object? error, StackTrace? stackTrace, Object? object, int depthOffset = 0]) =>
+  @Deprecated('Use Logger.warn(...) or mixin Log4Dart with logWarn(...)')
+  void logWarning(String tag, Object message, [Object? error, StackTrace? stackTrace, Object? object, int depthOffset = 0]) =>
       log(Level.WARNING, message, tag, error, stackTrace, object, depthOffset);
 
   ///
   /// Log message at level [Level.ERROR].
   ///
-  void error(String tag, String message, [Object? error, StackTrace? stackTrace, Object? object, int depthOffset = 0]) =>
+  @Deprecated('Use Logger.error(...) or mixin Log4Dart with logError(...)')
+  void logError(String tag, Object message, [Object? error, StackTrace? stackTrace, Object? object, int depthOffset = 0]) =>
       log(Level.ERROR, message, tag, error, stackTrace, object, depthOffset);
 
   ///
   /// Log message at level [Level.FATAL].
   ///
-  void fatal(String tag, String message, [Object? error, StackTrace? stackTrace, Object? object, int depthOffset = 0]) =>
+  @Deprecated('Use Logger.fatal(...) or mixin Log4Dart with logFatal(...)')
+  void logFatal(String tag, Object message, [Object? error, StackTrace? stackTrace, Object? object, int depthOffset = 0]) =>
       log(Level.FATAL, message, tag, error, stackTrace, object, depthOffset);
+
+  ///
+  /// Log message at level [Level.TRACE].
+  /// (as of version: 1.0.0)
+  ///
+  static void trace(Object message, {String? tag, Object? exception, StackTrace? stackTrace, Object? object}) {
+    tag ??= '';
+    Logger.instance.log(Level.TRACE, message, tag, exception?.toString(), stackTrace, object, kStackDepthOffset);
+  }
+
+  ///
+  /// Log message at level [Level.DEBUG].
+  /// (as of version: 1.0.0)
+  ///
+  static void debug(Object message, {String? tag, Object? exception, StackTrace? stackTrace, Object? object}) {
+    tag ??= '';
+    Logger.instance.log(Level.DEBUG, message, tag, exception?.toString(), stackTrace, object, kStackDepthOffset);
+  }
+
+  ///
+  /// Log message at level [Level.INFO].
+  /// (as of version: 1.0.0)
+  ///
+  static void info(Object message, {String? tag, Object? exception, StackTrace? stackTrace, Object? object}) {
+    tag ??= '';
+    Logger.instance.log(Level.INFO, message, tag, exception?.toString(), stackTrace, object, kStackDepthOffset);
+  }
+
+  ///
+  /// Log message at level [Level.WARNING].
+  /// (as of version: 1.0.0)
+  ///
+  static void warn(Object message, {String? tag, Object? exception, StackTrace? stackTrace, Object? object}) {
+    tag ??= '';
+    Logger.instance.log(Level.WARNING, message, tag, exception?.toString(), stackTrace, object, kStackDepthOffset);
+  }
+
+  ///
+  /// Log message at level [Level.ERROR].
+  /// (as of version: 1.0.0)
+  ///
+  static void error(Object message, {String? tag, Object? exception, StackTrace? stackTrace, Object? object}) {
+    tag ??= '';
+    Logger.instance.log(Level.ERROR, message, tag, exception?.toString(), stackTrace, object, kStackDepthOffset);
+  }
+
+  ///
+  /// Log message at level [Level.FATAL].
+  /// (as of version: 1.0.0)
+  ///
+  static void fatal(Object message, {String? tag, Object? exception, StackTrace? stackTrace, Object? object}) {
+    tag ??= '';
+    Logger.instance.log(Level.FATAL, message, tag, exception?.toString(), stackTrace, object, kStackDepthOffset);
+  }
 
   ///
   /// Adds a custom appender to the list of appenders.

@@ -12,3 +12,4 @@ doc/api/
 
 # SDK directories
 .idea
+.DS_Store

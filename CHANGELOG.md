@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.0 - 2022-05-01
+
+- Static log access: Logger.debug (old: Logger().debug(), to keep, change method signature, change old to Logger().logDebug()
+- Log4Dart mixin for easy log access. logDebug('message') vs Logger.debug('message')
+- Add MDC
+- Add filename, line and number to message (IDE should like to file). Stack frame depth configurable, e.g. when using proxies on the client side.
+- Option to send console logs to the developer tools (log function). To be tested.
+- Null Safety
+
 ## 0.4.0 - 2020-01-14
 
 - Add template feature to EmailAppender (#4)

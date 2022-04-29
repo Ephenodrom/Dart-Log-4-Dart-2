@@ -1,5 +1,3 @@
-import 'dart:isolate';
-
 import 'package:log_4_dart_2/log_4_dart_2.dart';
 import 'package:test/test.dart';
 
@@ -8,7 +6,13 @@ import 'package:test/test.dart';
 void main() {
   const kLog4DartConfig = {
     'appenders': [
-      {'type': 'CONSOLE', 'format': '%d%i%t%l%c %m %f', 'level': 'TRACE', 'dateFormat': 'yyyy-MM-dd HH:mm:ss.SSS', 'brackets': true},
+      {
+        'type': 'CONSOLE',
+        'format': '%d%i%t%l%c %m %f',
+        'level': 'TRACE',
+        'dateFormat': 'yyyy-MM-dd HH:mm:ss.SSS',
+        'brackets': true,
+      },
     ]
   };
 
@@ -24,7 +28,7 @@ void main() {
   });
 }
 
-class ClientWithLogEx with LoggingExposure {
+class ClientWithLogEx with Log4Dart {
   void logStuff(String s) {
     logTrace(s, tag: 'tag-512');
     logDebug(s, tag: 'tag-512');
@@ -49,7 +53,7 @@ class ClientWithLogEx with LoggingExposure {
 //
 // [2022-04-28 11:12:39.353][DEBUG	][ClientBehindOwnProxy.logStuff:66]: this is the message through proxy -
 // [file:///Users/raoul/dev/udemy/local_workbench/Dart-Log-4-Dart-2/test/logger_stack_trace_test.dart(66:11)]
-class ClientLoggingProxyWithLogEx with LoggingExposure {
+class ClientLoggingProxyWithLogEx with Log4Dart {
   void logDebugProxy(String notThisLine) {
     logDebug(notThisLine);
   }
@@ -65,6 +69,6 @@ class ClientBehindOwnProxy {
 
 class ClientWithDirectLogger {
   void logStuff(String x) {
-    Logger.instance.debug('Some-Tag', x);
+    Logger.instance.logDebug('Some-Tag', x);
   }
 }

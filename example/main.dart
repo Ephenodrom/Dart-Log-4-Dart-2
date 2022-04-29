@@ -14,6 +14,6 @@ class ExampleClass {
   static String TAG = 'ExampleClass';
 
   static void doSomething() {
-    Logger.instance.info(TAG, 'I am doing something!');
+    Logger.instance.logInfo(TAG, 'I am doing something!');
   }
 }
