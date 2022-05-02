@@ -27,7 +27,7 @@ void main() {
     } on FileSystemException {
       fail('Can not remove file with name "unittest_$yesterDayAsString.txt"');
     }
-    Logger.instance.info('UnitTest', 'Hello World');
+    Logger.instance.logInfo('UnitTest', 'Hello World');
     await Future.delayed(Duration(seconds: 2));
     if (FileSystemEntity.typeSync('unittest_$nowAsString.txt') == FileSystemEntityType.notFound) {
       fail('New file "unittest_$nowAsString.txt" not found!');
@@ -59,7 +59,7 @@ void main() {
     } on FileSystemException {
       fail('Can not remove file with name "unittest_$lastWeekAsString.txt"');
     }
-    Logger.instance.info('UnitTest', 'Hello World');
+    Logger.instance.logInfo('UnitTest', 'Hello World');
     await Future.delayed(Duration(seconds: 2));
     if (FileSystemEntity.typeSync('unittest_$nowAsString.txt') == FileSystemEntityType.notFound) {
       fail('New file "unittest_$nowAsString.txt" not found!');
@@ -92,7 +92,7 @@ void main() {
     } on FileSystemException {
       fail('Can not remove file with name "unittest_$lastMonthAsString.txt"');
     }
-    Logger.instance.info('UnitTest', 'Hello World');
+    Logger.instance.logInfo('UnitTest', 'Hello World');
     await Future.delayed(Duration(seconds: 2));
     if (FileSystemEntity.typeSync('unittest_$nowAsString.txt') == FileSystemEntityType.notFound) {
       fail('New file "unittest_$nowAsString.txt" not found!');
@@ -125,7 +125,7 @@ void main() {
     } on FileSystemException {
       fail('Can not remove file with name "unittest_$lastYearAsString.txt"');
     }
-    Logger.instance.info('UnitTest', 'Hello World');
+    Logger.instance.logInfo('UnitTest', 'Hello World');
     await Future.delayed(Duration(seconds: 2));
     if (FileSystemEntity.typeSync('unittest_$nowAsString.txt') == FileSystemEntityType.notFound) {
       fail('New file "unittest_$nowAsString.txt" not found!');

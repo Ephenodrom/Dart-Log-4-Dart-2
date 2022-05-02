@@ -77,7 +77,7 @@ class MyApp {
   }
 }
 
-class ClientWithLogEx with LoggingExposure {
+class ClientWithLogEx with Log4Dart {
   void logStuff(String s) {
     logTrace(s, tag: 'tag-512');
   }

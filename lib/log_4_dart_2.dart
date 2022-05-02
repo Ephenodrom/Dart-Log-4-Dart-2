@@ -6,7 +6,7 @@ library file_logger;
 export 'src/Level.dart';
 export 'src/LogRecord.dart';
 export 'src/Logger.dart';
-export 'src/LoggingExposure.dart';
+export 'src/Log4Dart.dart';
 export 'src/appender/Appender.dart';
 export 'src/appender/AppenderType.dart';
 export 'src/appender/ConsoleAppender.dart';

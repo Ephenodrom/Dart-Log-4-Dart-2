@@ -8,7 +8,7 @@ class LogRecord {
   final Level level;
 
   /// The message
-  final String message;
+  final Object message;
 
   /// Non-string message passed to Logger.
   final Object? object;

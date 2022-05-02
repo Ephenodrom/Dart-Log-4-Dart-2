@@ -36,7 +36,7 @@ Update pubspec.yaml and add the following line to your dependencies.
 
 ```yaml
 dependencies:
-  log_for_dart_2: ^0.4.0
+  log_for_dart_2: ^1.0.0
 ```
 
 ## Import
@@ -64,6 +64,8 @@ void main(List<String> arguments){
   Logger.init(config);
 }
 ```
+Note that Logger.init(...) has to be called only once, preferably in the main method. It configures
+an instance internally that can then be accessed statically through Logger (or Logger.instance).
 
 Take a look at [Example Configuration](#example-configuration) for a full example.
 
@@ -73,12 +75,45 @@ The [Logger](/lib/src/Logger.dart) offers multiple methods for logging on differ
 
 ```dart
 static String TAG = 'TestClass';
-Logger.instance.debug(TAG, 'Lorem Ipsum');
-Logger.instance.trace(TAG, 'Lorem Ipsum');
-Logger.instance.info(TAG, 'Lorem Ipsum');
-Logger.instance.warning(TAG, 'Lorem Ipsum');
-Logger.instance.error(TAG, 'Lorem Ipsum');
-Logger.instance.fatal(TAG, 'Lorem Ipsum');
+Logger.debug('Lorem Ipsum', tag: TAG);
+Logger.trace('Lorem Ipsum', tag: TAG);
+Logger.info('Lorem Ipsum', tag: TAG);
+Logger.warn('Lorem Ipsum', tag: TAG);
+Logger.error('Lorem Ipsum', tag: TAG);
+Logger.fatal('Lorem Ipsum', tag: TAG);
+```
+Note that as of version 1.0.0, the old way has to be slightly adapted: the methods ```Logger().debug(...)```
+are now called ```Logger().logDebug(...)``` (respectively per level).
+
+There are two ways that are considered best for logging from a client context:
+
+1) Directly through the static log methods on the Logger class:
+
+```dart
+class PlainClient {
+  void doStuff() {
+    Logger.debug('message', tag: 'some tag');
+  }
+}
+```
+
+2) Through the mixin Log4Dart. Note that the log methods are here called e.g. logDebug(...) to 
+make their origin within the client code clear.
+   
+```dart
+class Client with Log4Dart {
+  void doStuff() {
+    logDebug('message', tag: 'some tag');
+  }
+}
+```
+Note that in both cases, the Logger has to be initialized, e.g in main:
+
+```dart
+void main() async {
+   await Logger.init(kLog4DartConfig);
+   ...
+}
 ```
 
 ## Appender And Configuration
@@ -91,6 +126,7 @@ The [ConsoleAppender](/lib/src/appender/ConsoleAppender.dart) is a simple append
 * dateFormat = The date format used for the appender. Default = yyyy-MM-dd HH:mm:ss.
 * level = The loglevel for this appender.
 * format = The format for the log output. See [Log format](#log-format) for more information.
+* brackets = bool to wrap all message blocks with brackets: [%d]. Message is excluded from this.
 
 ### FileAppender
 
@@ -209,6 +245,56 @@ The format of the log entrys can be configured for some appender.
 * %t = The tag.
 * %l = The log level.
 * %m = The message.
+* %f = The file name with line and column number (e.g. package:my_project/chat_screen.dart(42:7))
+* %c = The class and method name with line number (e.g. ChatScreenState.getCurrentUser:42)
+
+Additionally you can add MDC (Mapped Diagnostic Context) placeholders when the app is run in a Zone:
+
+* %X{<key-name>}
+
+Best shown in an example:
+
+```dart
+void main() async {
+   await Logger.init(kLog4DartConfig);
+  
+   // We define values to zone as 3rd param: zoneValues
+   // This cannot run within the test callback, for the moment this works directly or further down the line...
+   await runZonedGuarded(() async {
+      // App running, we set some vars somewhere down the line to zone:
+      if (Zone.current['LOG_SESSION_HASH_KEY'] != null) {
+         // sets LOG_SESSION_HASH_KEY to 865a15
+         Zone.current['LOG_SESSION_HASH_KEY'].add(generateMd5Fingerprint('Some data like app start timestamp'));
+      }
+      // Then we log and hand off to the logging library
+      Logger.debug('hello world');
+      }, (Object error, StackTrace stackTrace) {
+         print(error);
+      }, zoneValues: {
+         // sets LOG_DEVICE_HASH_KEY to 8634e3c65a15
+         'LOG_DEVICE_HASH_KEY': [generateMd5Fingerprint('Data that is consistent per platform like values delivered by device_info_plus')],
+         vLOG_SESSION_HASH_KEY': [], // yet empty, set further down the line
+      });
+   }
+   
+   // Just an idea...
+   String generateMd5Fingerprint(String input) {
+      return md5.convert(utf8.encode(input)).toString().substring(0, 6);
+   }
+}
+```
+
+With this format setup
+
+```
+'format': '%d%i%X{logging.device-hash}%X{logging.session-hash}%t%l%c %m %f'
+```
+
+It should print something like this, where the two parts [634e3c] and [865a15] can be useful for log analysis:  
+
+```
+ [2022-04-28 14:44:26.934][CONSOLE][634e3c][865a15][tag-512][DEBUG][ClientWithLogEx.logStuff:60] hello world [package:my_project/chat_screen.dart(60:5)]
+```
 
 Examples :
 
@@ -244,9 +330,11 @@ var config = {
   'appenders': [
     {
       'type': 'CONSOLE',
-      'dateFormat' : 'yyyy-MM-dd HH:mm:ss',
-      'format': '%d %i %t %l %m',
-      'level': 'INFO'
+      'format': '%d%i%t%l%c %m %f',
+      'level': 'TRACE',
+      'dateFormat': 'yyyy-MM-dd HH:mm:ss.SSS',
+      'brackets': true,
+      'mode': 'stdout'
     },
     {
       'type': 'FILE',
