@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1 - 2023-10-21
+
+- Upgraded dependencies
+
 ## 1.0.0 - 2022-05-01
 
 - Static log access: Logger.debug (old: Logger().debug(), to keep, change method signature, change old to Logger().logDebug()
