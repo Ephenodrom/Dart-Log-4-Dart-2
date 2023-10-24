@@ -1,5 +1,4 @@
 import 'package:log_4_dart_2/log_4_dart_2.dart';
-import 'package:log_4_dart_2/src/appender/AppenderType.dart';
 
 ///
 /// The basic appender.

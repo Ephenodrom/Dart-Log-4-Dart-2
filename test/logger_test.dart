@@ -1,8 +1,4 @@
 import 'package:log_4_dart_2/log_4_dart_2.dart';
-import 'package:log_4_dart_2/src/appender/AppenderType.dart';
-import 'package:log_4_dart_2/src/appender/EmailAppender.dart';
-import 'package:log_4_dart_2/src/appender/HttpAppender.dart';
-import 'package:log_4_dart_2/src/appender/RotationCycle.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -10,7 +6,14 @@ void main() {
     var config = {
       'appenders': [
         {'type': 'CONSOLE', 'format': '%d %t %l %m', 'level': 'INFO'},
-        {'type': 'FILE', 'format': '%d %t %l %m', 'level': 'INFO', 'filePattern': 'log4dart2_log', 'fileExtension': 'txt', 'path': '/path/to/'},
+        {
+          'type': 'FILE',
+          'format': '%d %t %l %m',
+          'level': 'INFO',
+          'filePattern': 'log4dart2_log',
+          'fileExtension': 'txt',
+          'path': '/path/to/'
+        },
         {
           'type': 'EMAIL',
           'level': 'INFO',
@@ -43,7 +46,13 @@ void main() {
       ],
     };
     await Logger.init(null);
-    Logger.instance.registerAllAppender([ConsoleAppender(), FileAppender(), HttpAppender(), EmailAppender(), MySqlAppender()]);
+    Logger.instance.registerAllAppender([
+      ConsoleAppender(),
+      FileAppender(),
+      HttpAppender(),
+      EmailAppender(),
+      MySqlAppender()
+    ]);
     await Logger.init(config, test: true);
 
     expect(Logger.instance.appenders.length, 5);

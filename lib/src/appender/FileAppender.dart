@@ -2,11 +2,7 @@ import 'dart:io';
 
 import 'package:basic_utils/basic_utils.dart';
 import 'package:intl/intl.dart';
-import 'package:log_4_dart_2/src/LogRecord.dart';
 import 'package:log_4_dart_2/src/LogRecordFormatter.dart';
-import 'package:log_4_dart_2/src/appender/Appender.dart';
-import 'package:log_4_dart_2/src/appender/AppenderType.dart';
-import 'package:log_4_dart_2/src/appender/RotationCycle.dart';
 
 import '../../log_4_dart_2.dart';
 import '../Utils.dart';
@@ -38,14 +34,36 @@ class FileAppender extends Appender {
       case RotationCycle.NEVER:
         return path! + filePattern! + '.' + fileExtension!;
       case RotationCycle.DAY:
-        return path! + filePattern! + '_' + DateFormat('yyyy-MM-dd').format(created) + '.' + fileExtension!;
+        return path! +
+            filePattern! +
+            '_' +
+            DateFormat('yyyy-MM-dd').format(created) +
+            '.' +
+            fileExtension!;
       case RotationCycle.WEEK:
-        return path! + filePattern! + '_' + created.year.toString() + '-CW' + DateUtils.getCalendarWeek(created).toString() + '.' + fileExtension!;
+        return path! +
+            filePattern! +
+            '_' +
+            created.year.toString() +
+            '-CW' +
+            DateUtils.getCalendarWeek(created).toString() +
+            '.' +
+            fileExtension!;
 
       case RotationCycle.MONTH:
-        return path! + filePattern! + '_' + DateFormat('yyyy-MM').format(created) + '.' + fileExtension!;
+        return path! +
+            filePattern! +
+            '_' +
+            DateFormat('yyyy-MM').format(created) +
+            '.' +
+            fileExtension!;
       case RotationCycle.YEAR:
-        return path! + filePattern! + '_' + DateFormat('yyyy').format(created) + '.' + fileExtension!;
+        return path! +
+            filePattern! +
+            '_' +
+            DateFormat('yyyy').format(created) +
+            '.' +
+            fileExtension!;
     }
     return '';
   }
@@ -64,14 +82,19 @@ class FileAppender extends Appender {
         break;
     }
     logRecord.loggerName ??= getType();
-    _file.writeAsStringSync(LogRecordFormatter.format(logRecord, format!, dateFormat: dateFormat) + '\n', mode: FileMode.append);
+    _file.writeAsStringSync(
+        LogRecordFormatter.format(logRecord, format!, dateFormat: dateFormat) +
+            '\n',
+        mode: FileMode.append);
     if (logRecord.stackTrace != null) {
-      _file.writeAsStringSync(logRecord.stackTrace.toString() + '\n', mode: FileMode.append);
+      _file.writeAsStringSync(logRecord.stackTrace.toString() + '\n',
+          mode: FileMode.append);
     }
   }
 
   @override
-  Future<void>? init(Map<String, dynamic> config, bool test, DateTime? date) async {
+  Future<void>? init(
+      Map<String, dynamic> config, bool test, DateTime? date) async {
     created = date ?? DateTime.now();
     type = AppenderType.FILE;
     if (config.containsKey('format')) {
@@ -104,7 +127,8 @@ class FileAppender extends Appender {
       path = config['path'];
     }
     if (!test) {
-      if (FileSystemEntity.typeSync(_getFullFilename()) == FileSystemEntityType.notFound) {
+      if (FileSystemEntity.typeSync(_getFullFilename()) ==
+          FileSystemEntityType.notFound) {
         _file = await File(_getFullFilename()).create();
       } else {
         _file = File(_getFullFilename());
@@ -132,7 +156,8 @@ class FileAppender extends Appender {
       case RotationCycle.WEEK:
         if (now.year > created.year) {
           create = true;
-        } else if (DateUtils.getCalendarWeek(now) > DateUtils.getCalendarWeek(created)) {
+        } else if (DateUtils.getCalendarWeek(now) >
+            DateUtils.getCalendarWeek(created)) {
           create = true;
         }
         break;

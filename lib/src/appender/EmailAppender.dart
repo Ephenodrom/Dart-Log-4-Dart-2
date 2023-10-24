@@ -2,9 +2,7 @@ import 'dart:io';
 
 import 'package:basic_utils/basic_utils.dart';
 import 'package:log_4_dart_2/log_4_dart_2.dart';
-import 'package:log_4_dart_2/src/LogRecord.dart';
 import 'package:log_4_dart_2/src/LogRecordFormatter.dart';
-import 'package:log_4_dart_2/src/appender/Appender.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 
@@ -34,11 +32,14 @@ class EmailAppender extends Appender {
     final message = Message()
       ..from = Address(fromMail!, fromName)
       ..recipients.addAll(to)
-      ..subject = 'Logger ${logRecord.level} at ${logRecord.getFormattedTime()}';
+      ..subject =
+          'Logger ${logRecord.level} at ${logRecord.getFormattedTime()}';
     if (html!) {
-      message.html = LogRecordFormatter.formatEmail(template, logRecord, dateFormat: dateFormat);
+      message.html = LogRecordFormatter.formatEmail(template, logRecord,
+          dateFormat: dateFormat);
     } else {
-      message.text = LogRecordFormatter.formatEmail(template, logRecord, dateFormat: dateFormat);
+      message.text = LogRecordFormatter.formatEmail(template, logRecord,
+          dateFormat: dateFormat);
     }
 
     if (IterableUtils.isNotNullOrEmpty(toCC)) {
@@ -128,7 +129,8 @@ class EmailAppender extends Appender {
       html = config['html'];
     }
     if (!test) {
-      _smtpServer = SmtpServer(host!, port: port!, username: user, password: password, ssl: ssl!);
+      _smtpServer = SmtpServer(host!,
+          port: port!, username: user, password: password, ssl: ssl!);
       _connection = PersistentConnection(_smtpServer);
     }
     if (config.containsKey('templateFile')) {

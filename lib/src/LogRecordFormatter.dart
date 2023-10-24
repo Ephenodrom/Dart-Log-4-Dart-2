@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:isolate';
 
 import 'package:basic_utils/basic_utils.dart';
 import 'package:intl/intl.dart';
 import 'package:log_4_dart_2/log_4_dart_2.dart';
 
-import '../log_4_dart_2.dart';
 import 'constants.dart';
 
 class LogRecordFormatter {
@@ -15,7 +13,8 @@ class LogRecordFormatter {
   ///
   /// The [dateFormat] defines the format for the [LogRecord.time]
   ///
-  static String format(LogRecord logRecord, String format, {String? dateFormat = 'yyyy-MM-dd HH:mm:ss', bool brackets = false}) {
+  static String format(LogRecord logRecord, String format,
+      {String? dateFormat = 'yyyy-MM-dd HH:mm:ss', bool brackets = false}) {
     var open = '';
     var close = ' ';
     var fill = '';
@@ -45,7 +44,8 @@ class LogRecordFormatter {
       }
     }
     if (format.contains('\%l')) {
-      format = format.replaceAll('\%l', (open + logRecord.level.name + fill + close).trim());
+      format = format.replaceAll(
+          '\%l', (open + logRecord.level.name + fill + close).trim());
     }
 
     if (format.contains('\%m')) {
@@ -72,7 +72,8 @@ class LogRecordFormatter {
           var mdcKey = element.substring(1, element.indexOf('}'));
           List<dynamic> values = Zone.current[mdcKey];
           if (values.isNotEmpty) {
-            format = format.replaceAll('%X{$mdcKey}', open + values[0].toString() + close);
+            format = format.replaceAll(
+                '%X{$mdcKey}', open + values[0].toString() + close);
           } else {
             format = format.replaceAll('%X{$mdcKey}', open + close);
           }
@@ -89,7 +90,8 @@ class LogRecordFormatter {
   ///
   /// The [dateFormat] defines the format for the [LogRecord.time]
   ///
-  static String formatJson(LogRecord logRecord, {String? dateFormat = 'yyyy-MM-dd HH:mm:ss.SSS'}) {
+  static String formatJson(LogRecord logRecord,
+      {String? dateFormat = 'yyyy-MM-dd HH:mm:ss.SSS'}) {
     var map = {
       'time': DateFormat(dateFormat).format(logRecord.time),
       'message': logRecord.message,
@@ -107,7 +109,8 @@ class LogRecordFormatter {
   ///
   /// The [dateFormat] defines the format for the [LogRecord.time]
   ///
-  static String formatEmail(String? template, LogRecord logRecord, {String? dateFormat = 'yyyy-MM-dd HH:mm:ss'}) {
+  static String formatEmail(String? template, LogRecord logRecord,
+      {String? dateFormat = 'yyyy-MM-dd HH:mm:ss'}) {
     if (template == null) {
       return formatJson(logRecord, dateFormat: dateFormat);
     }

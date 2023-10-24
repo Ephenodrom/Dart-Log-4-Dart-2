@@ -1,11 +1,7 @@
 import 'dart:async';
-import 'dart:math';
 
-import 'package:intl/intl.dart';
 import 'package:log_4_dart_2/log_4_dart_2.dart';
-import 'package:log_4_dart_2/src/LogRecord.dart';
 import 'package:log_4_dart_2/src/LogRecordFormatter.dart';
-import 'package:log_4_dart_2/src/appender/Appender.dart';
 import 'dart:developer' as devtools;
 
 /// Set devtools this when running on the physical app or on webbrowser. Will log to dart:devtools. This way, the result
@@ -49,7 +45,8 @@ class ConsoleAppender extends Appender {
         stackTrace: logRecord.stackTrace,
       );
     } else {
-      print(LogRecordFormatter.format(logRecord, format!, dateFormat: dateFormat, brackets: brackets));
+      print(LogRecordFormatter.format(logRecord, format!,
+          dateFormat: dateFormat, brackets: brackets));
     }
 
     var tabs = '\t';

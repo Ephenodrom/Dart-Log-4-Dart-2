@@ -1,8 +1,6 @@
 import 'package:basic_utils/basic_utils.dart';
 import 'package:log_4_dart_2/log_4_dart_2.dart';
-import 'package:log_4_dart_2/src/LogRecord.dart';
 import 'package:log_4_dart_2/src/LogRecordFormatter.dart';
-import 'package:log_4_dart_2/src/appender/Appender.dart';
 
 ///
 /// A appender for sending log entries via http
@@ -50,7 +48,8 @@ class HttpAppender extends Appender {
       List<String> h = config['headers'];
       for (var s in h) {
         var splitted = s.split(':');
-        headers!.putIfAbsent(splitted.elementAt(0), () => splitted.elementAt(1));
+        headers!
+            .putIfAbsent(splitted.elementAt(0), () => splitted.elementAt(1));
       }
     }
     return null;

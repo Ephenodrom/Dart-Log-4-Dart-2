@@ -1,6 +1,4 @@
 import 'package:log_4_dart_2/log_4_dart_2.dart';
-import 'package:log_4_dart_2/src/LogRecord.dart';
-import 'package:log_4_dart_2/src/appender/Appender.dart';
 import 'package:mysql1/mysql1.dart';
 
 ///
@@ -32,7 +30,12 @@ class MySqlAppender extends Appender {
   void append(LogRecord logRecord) async {
     logRecord.loggerName ??= getType();
     await _connection.query(
-        'insert into $table (tag, level, message, time) values (?, ?, ?, ?)', [logRecord.tag, logRecord.level.name, logRecord.message, logRecord.time.toUtc()]);
+        'insert into $table (tag, level, message, time) values (?, ?, ?, ?)', [
+      logRecord.tag,
+      logRecord.level.name,
+      logRecord.message,
+      logRecord.time.toUtc()
+    ]);
   }
 
   @override
@@ -41,7 +44,8 @@ class MySqlAppender extends Appender {
   }
 
   @override
-  Future<void>? init(Map<String, dynamic> config, bool test, DateTime? date) async {
+  Future<void>? init(
+      Map<String, dynamic> config, bool test, DateTime? date) async {
     created = date ?? DateTime.now();
     type = AppenderType.MYSQL;
     if (config.containsKey('level')) {
@@ -78,7 +82,12 @@ class MySqlAppender extends Appender {
       throw ArgumentError('Missing table argument for MySqlAppender');
     }
     if (!test) {
-      _connectionSettings = ConnectionSettings(host: host!, port: port!, user: user, password: password, db: database);
+      _connectionSettings = ConnectionSettings(
+          host: host!,
+          port: port!,
+          user: user,
+          password: password,
+          db: database);
       _connection = await MySqlConnection.connect(_connectionSettings);
     }
     return null;
