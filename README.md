@@ -4,25 +4,27 @@ A dart package for advanced logging, with multiple and configurable appenders.
 
 ## Table of Contents
 
-1. [Preamble](#preamble)
-2. [Install](#install)
-   * [pubspec.yaml](#pubspec.yaml)
-3. [Import](#import)
-4. [Usage](#usage)
-   * [Setup Logger](#setup-logger)
-   * [Logging](#logging)
-5. [Appender And Configuration](#appender-and-configuration)
-   * [ConsoleAppender](#consoleappender)
-   * [FileAppender](#fileappender)
-   * [HttpAppender](#httpappender)
-   * [EmailAppender](#emailappender)
-   * [MySqlAppender](#mysqlappender)
-   * [Adding Custom Appender](#adding-custom-appender)
-   * [Log Format](#log-format)
-   * [Rotation Cycle](#rotation-cycle)
-   * [Example Configuration](#example-configuration)
-6. [Changelog](#changelog)
-7. [Copyright And License](#copyright-and-license)
+- [Log 4 Dart 2](#log-4-dart-2)
+  - [Table of Contents](#table-of-contents)
+  - [Preamble](#preamble)
+  - [Install](#install)
+    - [pubspec.yaml](#pubspecyaml)
+  - [Import](#import)
+  - [Usage](#usage)
+    - [Setup Logger](#setup-logger)
+    - [Logging](#logging)
+  - [Appender And Configuration](#appender-and-configuration)
+    - [ConsoleAppender](#consoleappender)
+    - [FileAppender](#fileappender)
+    - [HttpAppender](#httpappender)
+    - [EmailAppender](#emailappender)
+    - [MySqlAppender](#mysqlappender)
+    - [Adding Custom Appender](#adding-custom-appender)
+    - [Log Format](#log-format)
+    - [Rotation Cycle](#rotation-cycle)
+    - [Example Configuration](#example-configuration)
+  - [Changelog](#changelog)
+  - [Copyright And License](#copyright-and-license)
 
 ## Preamble
 
@@ -36,7 +38,7 @@ Update pubspec.yaml and add the following line to your dependencies.
 
 ```yaml
 dependencies:
-  log_for_dart_2: ^1.0.0
+  log_for_dart_2: ^1.0.1
 ```
 
 ## Import
