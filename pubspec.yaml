@@ -7,7 +7,7 @@ environment:
   sdk: '>=2.16.0 < 4.0.0'
 
 dependencies:
-  analyzer: ^6.3.0
+  analyzer: ^6.2.0
   basic_utils: ^5.6.1
   intl: ^0.18.1
   mailer: ^6.0.1
